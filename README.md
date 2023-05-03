@@ -99,7 +99,7 @@ use({
 | `<C-q>`   | Close                                                             |
 | `<Esc>`   | Clear search                                                      |
 | `<C-d>`   | Scroll down preview                                               |
-| `<C-d>`   | Scroll up preview                                                 |
+| `<C-u>`   | Scroll up preview                                                 |
 | `<M-p>`   | Toggle preview (show / hide)                                      |
 | `<M-l>`   | Toggle info (short / long) - for Explorer and Search Files        |
 | `<M-h>`   | Toggle hidden files (show / hide) - for Explorer and Search Files |
