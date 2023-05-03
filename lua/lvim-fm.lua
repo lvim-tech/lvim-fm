@@ -1,17 +1,17 @@
 local config = {
 	ui = {
-		dafault = "float",
+		default = "split",
 		float = {
 			border = { " ", " ", " ", " ", " ", " ", " ", " " },
 			float_hl = "Normal",
 			border_hl = "FloatBorder",
 			blend = 0,
-			height = 0.8,
-			width = 0.8,
+			height = 1,
+			width = 1,
 			x = 0.5,
 			y = 0.5,
 		},
-		split = "belowright new", -- `leftabove new`, `rightbelow new`, `leftabove vnew 24`, `rightbelow vnew 24`
+		split = "rightbelow new", -- `leftabove new`, `rightbelow new`, `leftabove vnew 24`, `rightbelow vnew 24`
 	},
 }
 
@@ -20,7 +20,7 @@ local M = {}
 M.init = function()
 	local lvim_shell = require("lvim-shell")
 	local exe_file = vim.fn.fnamemodify(debug.getinfo(1, "S").source:gsub("^@", ""), ":h:h") .. "/bin/FileManager"
-	if config.ui.float == "split" then
+	if config.ui.default == "split" then
 		lvim_shell.split(exe_file, "<CR>", config)
 	else
 		lvim_shell.float(exe_file, "<CR>", config)
