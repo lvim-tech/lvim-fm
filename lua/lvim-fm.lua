@@ -1,6 +1,6 @@
 local config = {
 	ui = {
-		default = "split",
+		default = "float",
 		float = {
 			border = { " ", " ", " ", " ", " ", " ", " ", " " },
 			float_hl = "Normal",
