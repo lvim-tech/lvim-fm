@@ -159,7 +159,7 @@ while :; do
         prompt=("--prompt=  Choice  ")
         preview_window_hidden=("--preview-window=:hidden")
     elif [[ $action == "explorer" ]]; then
-        header=("--header=󰙅 EXPLORER")
+        header=("--header=󰙅 EXPLORER  $PWD")
         prompt=("--prompt=  Browse  ")
         bind_app=(
             "--bind=alt-l:clear-selection+execute-silent( \
@@ -180,7 +180,7 @@ while :; do
             long_info="--long"
         fi
     elif [[ $action == "search-files" ]]; then
-        header=("--header=󰈔 SEARCH FILES")
+        header=("--header=󰈔 SEARCH FILES  $PWD")
         prompt=("--prompt=  Search  ")
         bind_app=(
             "--bind=alt-l:clear-selection+execute-silent( \
@@ -195,7 +195,7 @@ while :; do
                 )+top+accept"
         )
     elif [[ $action == "search-in-files" ]]; then
-        header=("--header=󰈙 SEARCH IN FILES")
+        header=("--header=󰈙 SEARCH IN FILES  $PWD")
         prompt=("--prompt=  Search  ")
         # multi=("+m")
         preview_window_for_search_in_files=("--preview-window=~0,+{2}+3/4")
