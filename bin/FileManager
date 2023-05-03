@@ -275,17 +275,9 @@ while :; do
         fi
 
     elif [[ $action == "search-files" ]]; then
-		result=$(
-			echo "$selected" |
-				rev |
-				cut -f1 -d ' ' |
-				rev |
-				sed \
-					-e 's/\[[0-9];[0-9][0-9]m//g' \
-					-e 's/\[[0-9];[0-9];[0-9][0-9]m//g' \
-					-e 's/\[0m//g' \
-					-e 's/ //g'
-		)
+        result=$(
+            echo "$selected" | cut -d" " -f2-
+        )
         if [[ -d $result ]]; then
             builtin cd "$result" || return
         elif [[ -f $(echo "$result" | tail -n1) ]]; then
@@ -293,23 +285,15 @@ while :; do
             break
         fi
     elif [[ $action == "explorer" ]]; then
-		result=$(
-			echo "$selected" |
-				rev |
-				cut -f1 -d " " |
-				rev |
-				sed \
-					-e "s/\[[0-9];[0-9][0-9]m//g" \
-					-e "s/\[[0-9];[0-9];[0-9][0-9]m//g" \
-					-e "s/\[0m//g" \
-					-e "s/ //g"
-		)
+        result=$(
+            echo "$selected" | cut -d" " -f2-
+        )
         if [[ -d $result ]]; then
             builtin cd "$result" || return
         fi
         result_full_path=$(echo "$result" | sed "s|^|$PWD/|")
         if [[ -f $(echo "$result_full_path" | tail -n1) ]]; then
-            echo "$result_full_path" > /tmp/lvim-shell
+            echo "$result_full_path" | tr " " "\n" > /tmp/lvim-shell
             break
         fi
 	fi
