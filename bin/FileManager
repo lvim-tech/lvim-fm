@@ -53,7 +53,6 @@ function get_list_for_fzf {
         print_fzf_header "$1"
         explorer "$1"
     elif [[ $action == "search-files" ]]; then
-        print_fzf_header "$1"
         search_files "$1"
     elif [[ $action == "search-in-files" ]]; then
         search_in_files "$1"
@@ -107,7 +106,7 @@ while :; do
     bind_base=(
         "--bind=ctrl-q:clear-selection+execute(echo QUIT)+abort"
         "--bind=esc:clear-selection+clear-query"
-        "--bind=alt-d:preview-down,ctrl-u:preview-up"
+        "--bind=ctrl-d:preview-down,ctrl-u:preview-up"
         "--bind=alt-p:toggle-preview+execute( \
             [ ! -f /tmp/lvim-file-manager/hidden-preview ] \
             && touch /tmp/lvim-file-manager/hidden-preview \
