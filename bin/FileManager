@@ -134,8 +134,8 @@ while :; do
     preview_window_for_search_in_files=()
     enter=("--bind=enter:accept")
     bind_base=(
-        "--bind=ctrl-q:clear-selection+execute(echo QUIT)+abort"
-        "--bind=esc:clear-selection+clear-query"
+        "--bind=esc:clear-selection+execute(echo QUIT)+abort"
+        "--bind=ctrl-c:clear-selection+clear-query"
         "--bind=ctrl-d:preview-down,ctrl-u:preview-up"
         "--bind=alt-p:toggle-preview+execute( \
             touch /tmp/lvim-file-manager/prevent && \

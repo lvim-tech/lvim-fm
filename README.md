@@ -97,15 +97,15 @@ use({
 | `<M-a>`   | Search directories and files              |
 | `<M-d>`   | Search directories                        |
 | `<M-f>`   | Search files                              |
-| `<C-w>`   | Search in files                           |
-| `<C-q>`   | Close                                     |
-| `<Esc>`   | Clear search                              |
+| `<M-w>`   | Search in files                           |
+| `<Esc>`   | Close                                     |
+| `<C-c>`   | Clear search                              |
 | `<C-d>`   | Scroll down preview                       |
 | `<C-u>`   | Scroll up preview                         |
 | `<M-p>`   | Toggle preview (show / hide)              |
 | `<M-h>`   | Toggle hidden files (show / hide)         |
 | `<M-l>`   | Toggle info (short / long) - for Explorer |
 | `<Enter>` | Open file(s) in current buf               |
-| `<C-v>`   | Open file(s) with split (vertical)        |
-| `<C-h>`   | Open file(s) with split (horizontal)      |
+| `<C-x>`   | Open file(s) with split                   |
+| `<C-v>`   | Open file(s) with vsplit                  |
 | `<C-t>`   | Open file(s) in new tab                   |
