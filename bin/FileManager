@@ -91,7 +91,7 @@ while :; do
     action=$(cat /tmp/lvim-file-manager/action)
     separator=("--separator=")
     header=("--header=")
-    info=("--info=hidden")
+    info=("--inline-info")
     no_border=("--no-border")
     border=("--border=none")
     pointer=("--pointer=")
