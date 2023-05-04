@@ -5,7 +5,7 @@ builtin cd "$1" || return
 mkdir -p /tmp/lvim-file-manager
 chmod 777 /tmp/lvim-file-manager
 
-if [ ! -f /tmp/lvim-file-manager/action ]; then
+if [[ ! -f /tmp/lvim-file-manager/action ]]; then
     echo "menu" > /tmp/lvim-file-manager/action
 fi
 
@@ -17,7 +17,7 @@ function print_fzf_menu {
 
 function print_fzf_header {
 	echo " ."
-	[ "$PWD" = "/" ] && echo "/" || echo " .."
+	[[ $PWD = "/" ]] && echo "/" || echo " .."
 }
 
 function explorer {
@@ -35,7 +35,7 @@ function explorer {
 }
 
 function search_files {
-	if [ -f /tmp/lvim-file-manager/hidden-files ]; then
+	if [[ -f /tmp/lvim-file-manager/hidden-files ]]; then
 		fd -H --color always --type f
 	else
 		fd --color always --type f
@@ -43,7 +43,7 @@ function search_files {
 }
 
 function search_in_files {
-	if [ -f /tmp/lvim-file-manager/hidden-files ]; then
+	if [[ -f /tmp/lvim-file-manager/hidden-files ]]; then
         rg --hidden --follow --color=always -n ${list_files:+-l} "$1"
 	else
         rg --follow --color=always -n ${list_files:+-l} "$1"
@@ -57,8 +57,10 @@ function get_list_for_fzf {
         print_fzf_header "$1"
         explorer "$1"
     elif [[ $action == "search-files" ]]; then
+        print_fzf_header "$1"
         search_files "$1"
     elif [[ $action == "search-in-files" ]]; then
+        print_fzf_header "$1"
         search_in_files "$1"
     fi
 }
@@ -77,9 +79,9 @@ function strip_output {
 
 function get_column_to_search {
 	# local nth=1
-    if [[ $action == "explorer" ]] && [ -f /tmp/lvim-file-manager/long-info ]; then
+    if [[ $action == "explorer" ]] && [[ -f /tmp/lvim-file-manager/long-info ]]; then
         nth='8..-1'
-    elif [[ $action == "explorer" ]] && [ ! -f /tmp/lvim-file-manager/long-info ]; then
+    elif [[ $action == "explorer" ]] && [[ ! -f /tmp/lvim-file-manager/long-info ]]; then
         nth='2..-1'
 	else
         nth=".."
@@ -159,7 +161,7 @@ while :; do
             \$VAL 2>/dev/null
         }"
     )
-    if [ -f /tmp/lvim-file-manager/hidden-preview ]; then
+    if [[ -f /tmp/lvim-file-manager/hidden-preview ]]; then
         preview_window_hidden=("--preview-window=:hidden")
     fi
     if [[ $action == "menu" ]]; then
@@ -183,10 +185,10 @@ while :; do
                 || rm /tmp/lvim-file-manager/hidden-files \
                 )+top+accept"
         )
-        if [ -f /tmp/lvim-file-manager/hidden-files ]; then
+        if [[ -f /tmp/lvim-file-manager/hidden-files ]]; then
             show_hidden_files="-a"
         fi
-        if [ -f /tmp/lvim-file-manager/long-info ]; then
+        if [[ -f /tmp/lvim-file-manager/long-info ]]; then
             long_info="--long"
         fi
     elif [[ $action == "search-files" ]]; then
@@ -282,17 +284,19 @@ while :; do
         esac
         return
     elif [[ $action == "search-in-files" ]]; then
-        if [ -f /tmp/lvim-file-manager/prevent ]; then
+        if [[ -f /tmp/lvim-file-manager/prevent ]]; then
             rm /tmp/lvim-file-manager/prevent
         else
-            result=$(echo "$selected" | sed 's/:.*//g' | tr " " "\n")
-            if [[ -f "$(echo "$result" | tail -n1)" ]]; then
-                echo "$result" | tr " " "\n" > /tmp/lvim-shell
-                break
+            if [[ ! "$selected" == " .." ]]; then
+                result=$(echo "$selected" | sed 's/:.*//g' | tr " " "\n")
+                if [[ -f "$(echo "$result" | tail -n1)" ]]; then
+                    echo "$result" | tr " " "\n" > /tmp/lvim-shell
+                    break
+                fi
             fi
         fi
     elif [[ $action == "search-files" ]]; then
-        if [ -f /tmp/lvim-file-manager/prevent ]; then
+        if [[ -f /tmp/lvim-file-manager/prevent ]]; then
             rm /tmp/lvim-file-manager/prevent
         else
             result=$(
@@ -306,7 +310,7 @@ while :; do
             fi
         fi
     elif [[ $action == "explorer" ]]; then
-        if [ -f /tmp/lvim-file-manager/prevent ]; then
+        if [[ -f /tmp/lvim-file-manager/prevent ]]; then
             rm /tmp/lvim-file-manager/prevent
         else
             result=$(
