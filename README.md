@@ -22,17 +22,17 @@ Install the plugin with your preferred package manager:
 
 ```lua
 require("lazy").setup({
-  {
-    "lvim-tech/lvim-fm",
-    dependencies = { "lvim-tech/lvim-shell" },
-    config = function()
-      require("lvim-fm").setup({
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      })
-    end,
-  },
+    {
+        "lvim-tech/lvim-fm",
+        dependencies = { "lvim-tech/lvim-shell" },
+        config = function()
+            require("lvim-fm").setup({
+                -- your configuration comes here
+                -- or leave it empty to use the default settings
+                -- refer to the configuration section below
+            })
+        end,
+    },
 })
 ```
 
@@ -40,15 +40,15 @@ require("lazy").setup({
 
 ```lua
 use({
-  "lvim-tech/lvim-fm",
-  requires = { "lvim-tech/lvim-shell" },
-  config = function()
-    require("lvim-fm").setup({
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    })
-  end,
+    "lvim-tech/lvim-fm",
+    requires = { "lvim-tech/lvim-shell" },
+    config = function()
+        require("lvim-fm").setup({
+            -- your configuration comes here
+            -- or leave it empty to use the default settings
+            -- refer to the configuration section below
+        })
+    end,
 })
 ```
 
@@ -90,20 +90,20 @@ use({
 
 ## Keys
 
-| Key       | Action                                                            |
-| --------- | ----------------------------------------------------------------- |
-| `<C-m>`   | Menu                                                              |
-| `<C-e>`   | Explorer                                                          |
-| `<C-f>`   | Search files                                                      |
-| `<C-s>`   | Search in files                                                   |
-| `<C-q>`   | Close                                                             |
-| `<Esc>`   | Clear search                                                      |
-| `<C-d>`   | Scroll down preview                                               |
-| `<C-u>`   | Scroll up preview                                                 |
-| `<M-p>`   | Toggle preview (show / hide)                                      |
-| `<M-l>`   | Toggle info (short / long) - for Explorer and Search Files        |
-| `<M-h>`   | Toggle hidden files (show / hide) - for Explorer and Search Files |
-| `<Enter>` | Open file(s) in current buf                                       |
-| `<C-v>`   | Open file(s) with split (vertical)                                |
-| `<C-h>`   | Open file(s) with split (horizontal)                              |
-| `<C-t>`   | Open file(s) in new tab                                           |
+| Key       | Action                                    |
+| --------- | ----------------------------------------- |
+| `<C-m>`   | Menu                                      |
+| `<C-e>`   | Explorer                                  |
+| `<C-f>`   | Search files                              |
+| `<C-s>`   | Search in files                           |
+| `<C-q>`   | Close                                     |
+| `<Esc>`   | Clear search                              |
+| `<C-d>`   | Scroll down preview                       |
+| `<C-u>`   | Scroll up preview                         |
+| `<M-p>`   | Toggle preview (show / hide)              |
+| `<M-h>`   | Toggle hidden files (show / hide)         |
+| `<M-l>`   | Toggle info (short / long) - for Explorer |
+| `<Enter>` | Open file(s) in current buf               |
+| `<C-v>`   | Open file(s) with split (vertical)        |
+| `<C-h>`   | Open file(s) with split (horizontal)      |
+| `<C-t>`   | Open file(s) in new tab                   |
