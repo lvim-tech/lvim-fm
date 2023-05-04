@@ -35,7 +35,7 @@ function explorer {
 }
 
 function search_files {
-	if [ -f /tmp/fzf-file-manager/hidden-files ]; then
+	if [ -f /tmp/lvim-file-manager/hidden-files ]; then
 		fd -H --color always --type f
 	else
 		fd --color always --type f
@@ -43,7 +43,11 @@ function search_files {
 }
 
 function search_in_files {
-	rg --hidden --follow --color=always -g "!.cache" -g "!.git" -g "!.github" -g "!.svn" -g "!.hg" -g "!CVS" -g "!.bzr" -g "!vendor" -g "!node_modules" -n ${list_files:+-l} "$1"
+	if [ -f /tmp/lvim-file-manager/hidden-files ]; then
+        rg --hidden --follow --color=always -n ${list_files:+-l} "$1"
+	else
+        rg --follow --color=always -n ${list_files:+-l} "$1"
+	fi
 }
 
 function get_list_for_fzf {
@@ -108,19 +112,24 @@ while :; do
         "--bind=esc:clear-selection+clear-query"
         "--bind=ctrl-d:preview-down,ctrl-u:preview-up"
         "--bind=alt-p:toggle-preview+execute( \
+            touch /tmp/lvim-file-manager/prevent && \
             [ ! -f /tmp/lvim-file-manager/hidden-preview ] \
             && touch /tmp/lvim-file-manager/hidden-preview \
             || rm /tmp/lvim-file-manager/hidden-preview)"
         "--bind=alt-m:abort+clear-selection+execute-silent( \
+            touch /tmp/lvim-file-manager/prevent && \
             echo menu > /tmp/lvim-file-manager/action \
             )+top+accept"
         "--bind=alt-e:abort+clear-selection+execute-silent( \
+            touch /tmp/lvim-file-manager/prevent && \
             echo explorer > /tmp/lvim-file-manager/action \
             )+top+accept"
         "--bind=alt-f:abort+clear-selection+execute-silent( \
+            touch /tmp/lvim-file-manager/prevent && \
             echo search-files > /tmp/lvim-file-manager/action \
             )+top+accept"
         "--bind=alt-s:abort+clear-selection+execute-silent( \
+            touch /tmp/lvim-file-manager/prevent && \
             echo search-in-files > /tmp/lvim-file-manager/action \
             )+top+accept"
 
@@ -162,11 +171,13 @@ while :; do
         prompt=("--prompt=  Browse  ")
         bind_app=(
             "--bind=alt-l:clear-selection+execute-silent( \
+                touch /tmp/lvim-file-manager/prevent && \
                 [ ! -f /tmp/lvim-file-manager/long-info ] \
                 && touch /tmp/lvim-file-manager/long-info \
                 || rm /tmp/lvim-file-manager/long-info \
                 )+top+accept"
             "--bind=alt-h:clear-selection+execute-silent(\
+                touch /tmp/lvim-file-manager/prevent && \
                 [ ! -f /tmp/lvim-file-manager/hidden-files ] \
                 && touch /tmp/lvim-file-manager/hidden-files \
                 || rm /tmp/lvim-file-manager/hidden-files \
@@ -182,22 +193,26 @@ while :; do
         header=("--header=󰈔 SEARCH FILES  $PWD")
         prompt=("--prompt=  Search  ")
         bind_app=(
-            "--bind=alt-l:clear-selection+execute-silent( \
-                [ ! -f /tmp/fzf-file-manager/long-info ] \
-                && touch /tmp/fzf-file-manager/long-info \
-                || rm /tmp/fzf-file-manager/long-info \
-                )+top+accept"
             "--bind=alt-h:clear-selection+execute-silent(\
-                [ ! -f /tmp/fzf-file-manager/hidden-files ] \
-                && touch /tmp/fzf-file-manager/hidden-files \
-                || rm /tmp/fzf-file-manager/hidden-files \
+                touch /tmp/lvim-file-manager/prevent && \
+                [ ! -f /tmp/lvim-file-manager/hidden-files ] \
+                && touch /tmp/lvim-file-manager/hidden-files \
+                || rm /tmp/lvim-file-manager/hidden-files \
                 )+top+accept"
         )
     elif [[ $action == "search-in-files" ]]; then
         header=("--header=󰈙 SEARCH IN FILES  $PWD")
         prompt=("--prompt=  Search  ")
+        bind_app=(
+            "--bind=alt-h:clear-selection+execute-silent(\
+                touch /tmp/lvim-file-manager/prevent && \
+                [ ! -f /tmp/lvim-file-manager/hidden-files ] \
+                && touch /tmp/lvim-file-manager/hidden-files \
+                || rm /tmp/lvim-file-manager/hidden-files \
+                )+top+accept"
+        )
         # multi=("+m")
-        preview_window_for_search_in_files=("--preview-window=~0,+{2}+3/4")
+        preview_window_for_search_in_files=("--preview-window=~0,+{2}+1/2")
         delimiter=("--delimiter=:")
         preview_engine=("--preview=VAL={1} && \
     {
@@ -267,33 +282,52 @@ while :; do
         esac
         return
     elif [[ $action == "search-in-files" ]]; then
-        result=$(echo "$selected" | sed 's/:.*//g' | tr " " "\n")
-        if [[ -f "$(echo "$result" | tail -n1)" ]]; then
-            echo "$result" | tr " " "\n" > /tmp/lvim-shell
-            break
+        if [ -f /tmp/lvim-file-manager/prevent ]; then
+            rm /tmp/lvim-file-manager/prevent
+        else
+            result=$(echo "$selected" | sed 's/:.*//g' | tr " " "\n")
+            if [[ -f "$(echo "$result" | tail -n1)" ]]; then
+                echo "$result" | tr " " "\n" > /tmp/lvim-shell
+                break
+            fi
         fi
-
     elif [[ $action == "search-files" ]]; then
-        result=$(
-            echo "$selected" | cut -d" " -f2-
-        )
-        if [[ -d $result ]]; then
-            builtin cd "$result" || return
-        elif [[ -f $(echo "$result" | tail -n1) ]]; then
-            echo "$result" | tr " " "\n" > /tmp/lvim-shell
-            break
+        if [ -f /tmp/lvim-file-manager/prevent ]; then
+            rm /tmp/lvim-file-manager/prevent
+        else
+            result=$(
+                echo "$selected" | cut -d" " -f2-
+            )
+            if [[ -d $result ]]; then
+                builtin cd "$result" || return
+            elif [[ -f $(echo "$result" | tail -n1) ]]; then
+                echo "$result" | tr " " "\n" > /tmp/lvim-shell
+                break
+            fi
         fi
     elif [[ $action == "explorer" ]]; then
-        result=$(
-            echo "$selected" | cut -d" " -f2-
-        )
-        if [[ -d $result ]]; then
-            builtin cd "$result" || return
-        fi
-        result_full_path=$(echo "$result" | sed "s|^|$PWD/|")
-        if [[ -f $(echo "$result_full_path" | tail -n1) ]]; then
-            echo "$result_full_path" | tr " " "\n" > /tmp/lvim-shell
-            break
+        if [ -f /tmp/lvim-file-manager/prevent ]; then
+            rm /tmp/lvim-file-manager/prevent
+        else
+            result=$(
+                echo "$selected" |
+                    rev |
+                    cut -f1 -d ' ' |
+                    rev |
+                    sed \
+                        -e 's/\[[0-9];[0-9][0-9]m//g' \
+                        -e 's/\[[0-9];[0-9];[0-9][0-9]m//g' \
+                        -e 's/\[0m//g' \
+                        -e 's/ //g'
+            )
+            if [[ -d $result ]]; then
+                builtin cd "$result" || return
+            fi
+            result_full_path=$(echo "$result" | sed "s|^|$PWD/|")
+            if [[ -f $(echo "$result_full_path" | tail -n1) ]]; then
+                echo "$result_full_path" | tr " " "\n" > /tmp/lvim-shell
+                break
+            fi
         fi
 	fi
 done
