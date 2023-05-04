@@ -11,6 +11,8 @@ fi
 
 function print_fzf_menu {
 	echo "󰙅 EXPLORER"
+	echo "󱋣 SEARCH DIRECTORIES AND FILES"
+	echo "󰉋 SEARCH DIRECTORIES"
 	echo "󰈔 SEARCH FILES"
 	echo "󰈙 SEARCH IN FILES"
 }
@@ -34,8 +36,24 @@ function explorer {
 		--level 1 "${1:-$PWD}" | sed "s/\*$//g"
 }
 
+function search_directories_and_files {
+	if [ -f /tmp/fzf/showhidden ]; then
+		fd -H --color always -E .cache -E .git -E .github -E vendor -E node_modules -E "*.svn" -E "*.hg" -E "*.CVS" -E "*.bzr"
+	else
+		fd --color always -E .cache -E .git -E .github -E vendor -E node_modules -E "*.svn" -E "*.hg" -E "*.CVS" -E "*.bzr"
+	fi
+}
+
+function search_directories {
+	if [ -f /tmp/fzf/showhidden ]; then
+		fd -H --color always --type d -E .cache -E .git -E .github -E vendor -E node_modules -E "*.svn" -E "*.hg" -E "*.CVS" -E "*.bzr"
+	else
+		fd --color always --type d -E .cache -E .git -E .github -E vendor -E node_modules -E "*.svn" -E "*.hg" -E "*.CVS" -E "*.bzr"
+	fi
+}
+
 function search_files {
-	if [[ -f /tmp/lvim-file-manager/hidden-files ]]; then
+	if [ -f /tmp/fzf/showhidden ]; then
 		fd -H --color always --type f
 	else
 		fd --color always --type f
@@ -56,6 +74,12 @@ function get_list_for_fzf {
     elif [[ $action == "explorer" ]]; then
         print_fzf_header "$1"
         explorer "$1"
+    elif [[ $action == "search-directories-and-files" ]]; then
+        print_fzf_header "$1"
+        search_directories_and_files "$1"
+    elif [[ $action == "search-directories" ]]; then
+        print_fzf_header "$1"
+        search_directories "$1"
     elif [[ $action == "search-files" ]]; then
         print_fzf_header "$1"
         search_files "$1"
@@ -126,11 +150,19 @@ while :; do
             touch /tmp/lvim-file-manager/prevent && \
             echo explorer > /tmp/lvim-file-manager/action \
             )+top+accept"
+        "--bind=alt-a:abort+clear-selection+execute-silent( \
+            touch /tmp/lvim-file-manager/prevent && \
+            echo search-directories-and-files > /tmp/lvim-file-manager/action \
+            )+top+accept"
+        "--bind=alt-d:abort+clear-selection+execute-silent( \
+            touch /tmp/lvim-file-manager/prevent && \
+            echo search-directories > /tmp/lvim-file-manager/action \
+            )+top+accept"
         "--bind=alt-f:abort+clear-selection+execute-silent( \
             touch /tmp/lvim-file-manager/prevent && \
             echo search-files > /tmp/lvim-file-manager/action \
             )+top+accept"
-        "--bind=alt-s:abort+clear-selection+execute-silent( \
+        "--bind=alt-w:abort+clear-selection+execute-silent( \
             touch /tmp/lvim-file-manager/prevent && \
             echo search-in-files > /tmp/lvim-file-manager/action \
             )+top+accept"
@@ -191,6 +223,28 @@ while :; do
         if [[ -f /tmp/lvim-file-manager/long-info ]]; then
             long_info="--long"
         fi
+    elif [[ $action == "search-directories-and-files" ]]; then
+        header=("--header=󱋣 SEARCH DIRECTORIES AND FILES  $PWD")
+        prompt=("--prompt=  Search  ")
+        bind_app=(
+            "--bind=alt-h:clear-selection+execute-silent(\
+                touch /tmp/lvim-file-manager/prevent && \
+                [ ! -f /tmp/lvim-file-manager/hidden-files ] \
+                && touch /tmp/lvim-file-manager/hidden-files \
+                || rm /tmp/lvim-file-manager/hidden-files \
+                )+top+accept"
+        )
+    elif [[ $action == "search-directories" ]]; then
+        header=("--header=󰉋 SEARCH DIRECTORIES  $PWD")
+        prompt=("--prompt=  Search  ")
+        bind_app=(
+            "--bind=alt-h:clear-selection+execute-silent(\
+                touch /tmp/lvim-file-manager/prevent && \
+                [ ! -f /tmp/lvim-file-manager/hidden-files ] \
+                && touch /tmp/lvim-file-manager/hidden-files \
+                || rm /tmp/lvim-file-manager/hidden-files \
+                )+top+accept"
+        )
     elif [[ $action == "search-files" ]]; then
         header=("--header=󰈔 SEARCH FILES  $PWD")
         prompt=("--prompt=  Search  ")
@@ -287,20 +341,29 @@ while :; do
         if [[ -f /tmp/lvim-file-manager/prevent ]]; then
             rm /tmp/lvim-file-manager/prevent
         else
-            if [[ ! "$selected" == " .." ]]; then
-                result=$(echo "$selected" | sed 's/:.*//g' | tr " " "\n")
-                if [[ -f "$(echo "$result" | tail -n1)" ]]; then
-                    echo "$result" | tr " " "\n" > /tmp/lvim-shell
-                    break
-                fi
+            if [[ $selected == " .." ]]; then
+                builtin cd .. || return
+            fi
+            result=$(echo "$selected" | sed 's/:.*//g' | tr " " "\n")
+            if [[ -f "$(echo "$result" | tail -n1)" ]]; then
+                echo "$result" | tr " " "\n" > /tmp/lvim-shell
+                break
             fi
         fi
-    elif [[ $action == "search-files" ]]; then
+    elif [[ $action == "search-directories-and-files" ]] || [[ $action == "search-directories" ]] || [[ $action == "search-files" ]]; then
         if [[ -f /tmp/lvim-file-manager/prevent ]]; then
             rm /tmp/lvim-file-manager/prevent
         else
             result=$(
-                echo "$selected" | cut -d" " -f2-
+                echo "$selected" |
+                    rev |
+                    cut -f1 -d ' ' |
+                    rev |
+                    sed \
+                        -e 's/\[[0-9];[0-9][0-9]m//g' \
+                        -e 's/\[[0-9];[0-9];[0-9][0-9]m//g' \
+                        -e 's/\[0m//g' \
+                        -e 's/ //g'
             )
             if [[ -d $result ]]; then
                 builtin cd "$result" || return

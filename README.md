@@ -92,10 +92,12 @@ use({
 
 | Key       | Action                                    |
 | --------- | ----------------------------------------- |
-| `<C-m>`   | Menu                                      |
-| `<C-e>`   | Explorer                                  |
-| `<C-f>`   | Search files                              |
-| `<C-s>`   | Search in files                           |
+| `<M-m>`   | Menu                                      |
+| `<M-e>`   | Explorer                                  |
+| `<M-a>`   | Search directories and files              |
+| `<M-d>`   | Search directories                        |
+| `<M-f>`   | Search files                              |
+| `<C-w>`   | Search in files                           |
 | `<C-q>`   | Close                                     |
 | `<Esc>`   | Clear search                              |
 | `<C-d>`   | Scroll down preview                       |
