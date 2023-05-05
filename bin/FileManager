@@ -42,7 +42,7 @@ function explorer {
 }
 
 function search_directories_and_files {
-	if [ -f /tmp/fzf/showhidden ]; then
+	if [ -f /tmp/lvim-file-manager/hidden-files ]; then
 		fd -H --color always -E .cache -E .git -E .github -E vendor -E node_modules -E "*.svn" -E "*.hg" -E "*.CVS" -E "*.bzr"
 	else
 		fd --color always -E .cache -E .git -E .github -E vendor -E node_modules -E "*.svn" -E "*.hg" -E "*.CVS" -E "*.bzr"
@@ -50,7 +50,7 @@ function search_directories_and_files {
 }
 
 function search_directories {
-	if [ -f /tmp/fzf/showhidden ]; then
+	if [ -f /tmp/lvim-file-manager/hidden-files ]; then
 		fd -H --color always --type d -E .cache -E .git -E .github -E vendor -E node_modules -E "*.svn" -E "*.hg" -E "*.CVS" -E "*.bzr"
 	else
 		fd --color always --type d -E .cache -E .git -E .github -E vendor -E node_modules -E "*.svn" -E "*.hg" -E "*.CVS" -E "*.bzr"
@@ -58,7 +58,7 @@ function search_directories {
 }
 
 function search_files {
-	if [ -f /tmp/fzf/showhidden ]; then
+	if [ -f /tmp/lvim-file-manager/hidden-files ]; then
 		fd -H --color always --type f
 	else
 		fd --color always --type f
