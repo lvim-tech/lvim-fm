@@ -114,7 +114,6 @@ function get_column_to_search {
 }
 
 function post_action {
-    # rm /tmp/lvim-shell
     is_break=false
     directories=()
     files=()
@@ -128,8 +127,6 @@ function post_action {
             files+=("$result")
         fi
     done
-    # if [[ ${#directories[@]} == 1 ]]; then
-    #     builtin cd "${directories[0]}" || return
     if [[ ${#directories[@]} -gt 0 ]]; then
         builtin cd "${directories[-1]}" || return
     fi
@@ -145,14 +142,10 @@ function post_action {
 function post_action_search {
     is_break=false
     files=()
-    # not qf
     clean_selected=$(echo "$selected" | sed "s/:.*//g")
     for result in $clean_selected; do
         files+=("$result")
     done
-    # files=$("${files[@]}" | uniq)
-    # files=("$(echo "${files[@]}" | tr ' ' '\n' | sort -u)")
-    # files=($(echo "${files[@]}" | awk 'BEGIN{RS=" ";} !a[$1]++ {print $1}'))
     mapfile -t files < <(echo "${files[@]}" | awk 'BEGIN{RS=" ";} !a[$1]++ {print $1}')
     if [[ ${#files[@]} != 0 ]]; then
         for i in "${files[@]}"; do
@@ -160,7 +153,6 @@ function post_action_search {
         done
         is_break=true
     fi
-    # for qf
     for i in "${selected[@]}"; do
         echo "$i" >> /tmp/lvim-shell_qf
     done
@@ -320,7 +312,6 @@ while :; do
                 || rm /tmp/lvim-file-manager/hidden-files \
                 )+top+accept"
         )
-        # multi=("+m")
         preview_window_for_search_in_files=("--preview-window=~0,+{2}+1/2")
         delimiter=("--delimiter=:")
         preview_engine=("--preview=VAL={1} && \
