@@ -1,9 +1,14 @@
 #!/bin/bash
-
 builtin cd "$1" || return
 
 mkdir -p /tmp/lvim-file-manager
 chmod 777 /tmp/lvim-file-manager
+
+echo "$PWD" >/tmp/lvim-file-manager/base-directory
+
+if [[ -f /tmp/lvim-file-manager/pwd ]]; then
+	builtin cd "$(cat /tmp/lvim-file-manager/pwd)" || return
+fi
 
 if [[ ! -f /tmp/lvim-file-manager/action ]]; then
 	echo "menu" >/tmp/lvim-file-manager/action
@@ -187,6 +192,15 @@ while :; do
             [ ! -f /tmp/lvim-file-manager/hidden-preview ] \
             && touch /tmp/lvim-file-manager/hidden-preview \
             || rm /tmp/lvim-file-manager/hidden-preview)"
+		"--bind=alt-,:abort+clear-selection+execute-silent( \
+            touch /tmp/lvim-file-manager/prevent && \
+            echo $PWD > /tmp/lvim-file-manager/pwd \
+            )+top+accept"
+		"--bind=alt-.:abort+clear-selection+execute-silent( \
+            touch /tmp/lvim-file-manager/prevent && \
+            touch /tmp/lvim-file-manager/reload && \
+            rm /tmp/lvim-file-manager/pwd \
+            )+top+accept"
 		"--bind=alt-m:abort+clear-selection+execute-silent( \
             touch /tmp/lvim-file-manager/prevent && \
             echo menu > /tmp/lvim-file-manager/action \
@@ -386,6 +400,10 @@ while :; do
 	elif [[ $action == "search-in-files" ]]; then
 		if [[ -f /tmp/lvim-file-manager/prevent ]]; then
 			rm /tmp/lvim-file-manager/prevent
+			if [[ -f /tmp/lvim-file-manager/reload ]]; then
+				rm /tmp/lvim-file-manager/reload
+				builtin cd "$(cat /tmp/lvim-file-manager/base-directory)" || return
+			fi
 		else
 			if [[ $selected == " .." ]]; then
 				builtin cd .. || return
@@ -398,6 +416,10 @@ while :; do
 	elif [[ $action == "search-directories-and-files" ]] || [[ $action == "search-directories" ]] || [[ $action == "search-files" ]]; then
 		if [[ -f /tmp/lvim-file-manager/prevent ]]; then
 			rm /tmp/lvim-file-manager/prevent
+			if [[ -f /tmp/lvim-file-manager/reload ]]; then
+				rm /tmp/lvim-file-manager/reload
+				builtin cd "$(cat /tmp/lvim-file-manager/base-directory)" || return
+			fi
 		else
 			result=$(
 				echo "$selected" |
@@ -418,6 +440,10 @@ while :; do
 	elif [[ $action == "explorer" ]]; then
 		if [[ -f /tmp/lvim-file-manager/prevent ]]; then
 			rm /tmp/lvim-file-manager/prevent
+			if [[ -f /tmp/lvim-file-manager/reload ]]; then
+				rm /tmp/lvim-file-manager/reload
+				builtin cd "$(cat /tmp/lvim-file-manager/base-directory)" || return
+			fi
 		else
 			result=$(
 				echo "$selected" |

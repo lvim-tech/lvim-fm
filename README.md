@@ -77,7 +77,8 @@ use({
     horz_split = "<C-h>",
     tabedit = "<C-t>",
     edit = "<C-e>",
-    close = "<C-q>",
+    close = "<Esc>",
+    qf = "<C-q>",
   },
 }
 ```
@@ -102,6 +103,8 @@ use({
 | `<C-c>`   | Clear search                              |
 | `<C-d>`   | Scroll down preview                       |
 | `<C-u>`   | Scroll up preview                         |
+| `<M-,>`   | Save current directory                    |
+| `<M-,>`   | Delete saved directory and cd to PWD      |
 | `<M-p>`   | Toggle preview (show / hide)              |
 | `<M-h>`   | Toggle hidden files (show / hide)         |
 | `<M-l>`   | Toggle info (short / long) - for Explorer |
@@ -109,3 +112,4 @@ use({
 | `<C-x>`   | Open file(s) with split                   |
 | `<C-v>`   | Open file(s) with vsplit                  |
 | `<C-t>`   | Open file(s) in new tab                   |
+| `<C-q>`   | Open file(s) in quick fix list            |
