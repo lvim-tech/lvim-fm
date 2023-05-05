@@ -113,6 +113,59 @@ function get_column_to_search {
 	echo -n $nth
 }
 
+function post_action {
+    # rm /tmp/lvim-shell
+    is_break=false
+    directories=()
+    files=()
+    for result in $selected; do
+        if [[ $is_explorer ]]; then
+            result=$PWD/$result
+        fi
+        if [[ -d $result ]]; then
+            directories+=("$result")
+        elif [[ -f $result ]]; then
+            files+=("$result")
+        fi
+    done
+    # if [[ ${#directories[@]} == 1 ]]; then
+    #     builtin cd "${directories[0]}" || return
+    if [[ ${#directories[@]} -gt 0 ]]; then
+        builtin cd "${directories[-1]}" || return
+    fi
+    if [[ ${#files[@]} != 0 ]]; then
+        for i in "${files[@]}"; do
+            echo "$i" >> /tmp/lvim-shell
+        done
+        is_break=true
+    fi
+    is_explorer=false
+}
+
+function post_action_search {
+    is_break=false
+    files=()
+    # not qf
+    clean_selected=$(echo "$selected" | sed "s/:.*//g")
+    for result in $clean_selected; do
+        files+=("$result")
+    done
+    # files=$("${files[@]}" | uniq)
+    # files=("$(echo "${files[@]}" | tr ' ' '\n' | sort -u)")
+    # files=($(echo "${files[@]}" | awk 'BEGIN{RS=" ";} !a[$1]++ {print $1}'))
+    mapfile -t files < <(echo "${files[@]}" | awk 'BEGIN{RS=" ";} !a[$1]++ {print $1}')
+    if [[ ${#files[@]} != 0 ]]; then
+        for i in "${files[@]}"; do
+            echo "$i" >> /tmp/lvim-shell
+        done
+        is_break=true
+    fi
+    # for qf
+    for i in "${selected[@]}"; do
+        echo "$i" >> /tmp/lvim-shell_qf
+    done
+}
+
 while :; do
     action=$(cat /tmp/lvim-file-manager/action)
     separator=("--separator=")
@@ -344,9 +397,8 @@ while :; do
             if [[ $selected == " .." ]]; then
                 builtin cd .. || return
             fi
-            result=$(echo "$selected" | sed 's/:.*//g' | tr " " "\n")
-            if [[ -f "$(echo "$result" | tail -n1)" ]]; then
-                echo "$result" | tr " " "\n" > /tmp/lvim-shell
+            post_action_search
+            if [[ $is_break == true ]]; then
                 break
             fi
         fi
@@ -365,10 +417,8 @@ while :; do
                         -e 's/\[0m//g' \
                         -e 's/ //g'
             )
-            if [[ -d $result ]]; then
-                builtin cd "$result" || return
-            elif [[ -f $(echo "$result" | tail -n1) ]]; then
-                echo "$result" | tr " " "\n" > /tmp/lvim-shell
+            post_action
+            if [[ $is_break == true ]]; then
                 break
             fi
         fi
@@ -387,12 +437,9 @@ while :; do
                         -e 's/\[0m//g' \
                         -e 's/ //g'
             )
-            if [[ -d $result ]]; then
-                builtin cd "$result" || return
-            fi
-            result_full_path=$(echo "$result" | sed "s|^|$PWD/|")
-            if [[ -f $(echo "$result_full_path" | tail -n1) ]]; then
-                echo "$result_full_path" | tr " " "\n" > /tmp/lvim-shell
+            is_explorer=true
+            post_action
+            if [[ $is_break == true ]]; then
                 break
             fi
         fi

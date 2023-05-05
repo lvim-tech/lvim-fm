@@ -21,6 +21,7 @@ local config = {
         tabedit = "<C-t>",
         edit = "<C-e>",
         close = "<Esc>",
+        qf = "<C-q>",
     },
 }
 
@@ -47,7 +48,6 @@ M.setup = function(user_config)
         config = vim.tbl_deep_extend("force", config, user_config)
     end
     M.commands()
-    -- M.init()
 end
 
 return M
