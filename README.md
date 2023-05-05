@@ -104,7 +104,7 @@ use({
 | `<C-d>`   | Scroll down preview                       |
 | `<C-u>`   | Scroll up preview                         |
 | `<M-,>`   | Save current directory                    |
-| `<M-,>`   | Delete saved directory and cd to PWD      |
+| `<M-.>`   | Delete saved directory and cd to PWD      |
 | `<M-p>`   | Toggle preview (show / hide)              |
 | `<M-h>`   | Toggle hidden files (show / hide)         |
 | `<M-l>`   | Toggle info (short / long) - for Explorer |
