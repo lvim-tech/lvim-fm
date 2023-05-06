@@ -67,9 +67,9 @@ function search_files {
 
 function search_in_files {
 	if [[ -f /tmp/lvim-file-manager/hidden-files ]]; then
-		rg --hidden --follow --color=always -n ${list_files:+-l} "$1"
+		rg --no-heading -H --line-number --column --hidden --follow --color=always -n ${list_files:+-l} "$1"
 	else
-		rg --follow --color=always -n ${list_files:+-l} "$1"
+		rg --no-heading -H --line-number --column --follow --color=always -n ${list_files:+-l} "$1"
 	fi
 }
 
@@ -89,7 +89,6 @@ function get_list_for_fzf {
 		print_fzf_header "$1"
 		search_files "$1"
 	elif [[ $action == "search-in-files" ]]; then
-		print_fzf_header "$1"
 		search_in_files "$1"
 	fi
 }
@@ -181,6 +180,7 @@ while :; do
 	preview_window_hidden=()
 	preview_window=("--preview-window=right:50%:noborder")
 	on_change="--bind=change:top"
+	reload=()
 	preview_window_for_search_in_files=()
 	enter=("--bind=enter:accept")
 	bind_base=(
@@ -325,6 +325,11 @@ while :; do
                 || rm /tmp/lvim-file-manager/hidden-files \
                 )+top+accept"
 		)
+		if [[ -f /tmp/lvim-file-manager/hidden-files ]]; then
+			reload=("--bind=change:reload:rg --no-heading -H --line-number --column --hidden --follow --color=always -n ${list_files:+-l} {q}")
+		else
+			reload=("--bind=change:reload:rg --no-heading -H --line-number --column --follow --color=always -n ${list_files:+-l} {q}")
+		fi
 		preview_window_for_search_in_files=("--preview-window=~0,+{2}+1/2")
 		delimiter=("--delimiter=:")
 		preview_engine=("--preview=VAL={1} && \
@@ -374,6 +379,7 @@ while :; do
 				"${preview_window_for_search_in_files[@]}" \
 				"${preview_window_hidden[@]}" \
 				"${on_change[@]}" \
+				"${reload[@]}" \
 				"${bind_base[@]}" \
 				"${bind_group[@]}" \
 				"${bind_app[@]}" \
