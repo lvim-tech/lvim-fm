@@ -53,7 +53,7 @@ function search_directories {
 	if [ -f /tmp/lvim-file-manager/hidden-files ]; then
 		fd -H --color always --type d
 	else
-		fd --color always --type d -E
+		fd --color always --type d
 	fi
 }
 
@@ -359,6 +359,7 @@ while :; do
 	selected=$(
 		get_list_for_fzf "$@" |
 			IFS=$'\n' fzf \
+				--reverse \
 				--query="$1" \
 				--nth="$(get_column_to_search)" \
 				"${delimiter[@]}" \
