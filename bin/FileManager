@@ -326,9 +326,9 @@ while :; do
                 )+top+accept"
 		)
 		if [[ -f /tmp/lvim-file-manager/hidden-files ]]; then
-			reload=("--bind=change:reload:rg --no-heading -H --line-number --column --hidden --follow --color=always -n ${list_files:+-l} {q}")
+			reload=("--bind=change:reload:rg --no-heading -H --line-number --column --hidden --follow --color=always -n ${list_files:+-l} {q} || true")
 		else
-			reload=("--bind=change:reload:rg --no-heading -H --line-number --column --follow --color=always -n ${list_files:+-l} {q}")
+			reload=("--bind=change:reload:rg --no-heading -H --line-number --column --follow --color=always -n ${list_files:+-l} {q} || true")
 		fi
 		preview_window_for_search_in_files=("--preview-window=~0,+{2}+1/2")
 		delimiter=("--delimiter=:")
