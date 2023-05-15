@@ -20,11 +20,12 @@ local config = {
         vsplit = "<C-v>",
         tabedit = "<C-t>",
         edit = "<C-e>",
-        close = "<Esc>",
-        qf = "<C-q>",
+        close = "<C-q>",
+        qf = "<M-q>",
     },
     env = {
-        LVIM_FM_PATH = os.getenv("HOME") .. "/.config/lvim-fm",
+        LVIM_FM_CONFIG_PATH = os.getenv("HOME") .. "/.config/lvim-fm",
+        LVIM_FM_BIN_PATH = vim.fn.fnamemodify(debug.getinfo(1, "S").source:gsub("^@", ""), ":h:h"),
         REVERSE = "--reverse",
         ICON_MENU = "",
         ICON_EXPLORER = "󰙅",
@@ -45,7 +46,7 @@ local config = {
         SEARCH_FILES_WITH_OUT_HIDEN = "fd --color always --type f",
         SEARCH_IN_FILES_WITH_HIDDEN = "rg --no-heading -H --line-number --column --hidden --follow --color=always",
         SEARCH_IN_FILES_WITH_OUT_HIDDEN = "rg --no-heading -H --line-number --column --follow --color=always",
-        KEY_QUIT = "esc",
+        KEY_QUIT = "ctrl-q",
         KEY_CLEAR_QUERY = "ctrl-c",
         KEY_PREVIEW_DOWN = "ctrl-d",
         KEY_PREVIEW_UP = "ctrl-u",
@@ -62,6 +63,13 @@ local config = {
         KEY_SEARCH_FILES = "alt-f",
         KEY_SEARCH_IN_FILES = "alt-w",
         KEY_TOGGLE_HIDDEN_FILES = "alt-h",
+        KEY_COPY = "alt-y",
+        KEY_CUT = "alt-o",
+        KEY_DELETE = "alt-r",
+        KEY_PASTE = "alt-p",
+        KEY_EXECUTE = "!",
+        KEY_APPLY = "alt-i",
+        KEY_TOGGLE_HELP = "alt-/",
     },
 }
 
@@ -69,7 +77,7 @@ local M = {}
 
 M.init = function()
     local lvim_shell = require("lvim-shell")
-    local exe_file = vim.fn.fnamemodify(debug.getinfo(1, "S").source:gsub("^@", ""), ":h:h") .. "/bin/FileManager"
+    local exe_file = config.env.LVIM_FM_BIN_PATH .. "/bin/FileManager"
     if config.ui.default == "split" then
         lvim_shell.split(exe_file, "<CR>", config)
     else

@@ -1,0 +1,33 @@
+LVIM FILE MANAGER
+
+EXPLORER
+
+SEARCH FILES
+
+SEARCH DIRECTORIES
+
+SEARCH FILES AND DIRECTORIES
+
+SEARCH IN FILES
+
+COPY FILES AND FOLDERS:
+1. Select files / folders
+2. Press "M-y" (switch to paste mode)
+3. Navigate to folder where you want to paste files / folders
+4. Press "!" (switch to execute mode)
+5. Select files / folder to confirm
+6. Press "M-i" to paste files / folders
+
+CUT FILES AND FOLDERS:
+1. Select files / folders
+2. Press "M-o" (switch to paste mode) -- PASTE - CUT
+3. Navigate to folder where you want to paste files / folders
+4. Press "!" (switch to execute mode)
+5. Select files / folder to confirm
+6. Press "M-i" to paste files / folders
+
+DELETE FILES AND FOLDERS
+1. Select files / folders
+2. Press "M-r" (switch to delete mode)
+3. Select files / folder to confirm
+4. Press "M-i" to delete files / folders
