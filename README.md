@@ -4,6 +4,14 @@
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://github.com/lvim-tech/lvim-colorscheme/blob/main/LICENSE)
 
+## Screenshots
+![1](https://github.com/lvim-tech/lvim-fm/assets/82431193/c04c8712-727c-4fb1-8b0e-527c3f0c7571)
+![2](https://github.com/lvim-tech/lvim-fm/assets/82431193/194e6316-5c23-4a1f-86cf-9849497798f3)
+
+## Video
+[YouTube](https://www.youtube.com/watch?v=dohJ7TS6ciE)
+
+
 ## Requirements
 
 -   [LVIM SHELL](https://github.com/lvim-tech/lvim-shell)
