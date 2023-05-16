@@ -310,6 +310,7 @@ while :; do
             || ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'SELECT' ] \
             && echo 'CUT' >$LVIM_FM_CONFIG_PATH/mode) \
         )+top+accept"
+		"--bind=$KEY_OPEN_TERMINAL:execute-silent($TERM_DEFAULT)"
 		"--bind=$KEY_DELETE:execute( \
             ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'SELECT' ] \
             && echo 'DELETE' >$LVIM_FM_CONFIG_PATH/mode) \

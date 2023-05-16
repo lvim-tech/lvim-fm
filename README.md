@@ -21,17 +21,17 @@ Install the plugin with your preferred package manager:
 
 ```lua
 require("lazy").setup({
-  {
-    "lvim-tech/lvim-fm",
-    dependencies = { "lvim-tech/lvim-shell" },
-    config = function()
-      require("lvim-fm").setup({
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      })
-    end,
-  },
+    {
+        "lvim-tech/lvim-fm",
+        dependencies = { "lvim-tech/lvim-shell" },
+        config = function()
+            require("lvim-fm").setup({
+                -- your configuration comes here
+                -- or leave it empty to use the default settings
+                -- refer to the configuration section below
+            })
+        end,
+    },
 })
 ```
 
@@ -39,15 +39,15 @@ require("lazy").setup({
 
 ```lua
 use({
-  "lvim-tech/lvim-fm",
-  requires = { "lvim-tech/lvim-shell" },
-  config = function()
-    require("lvim-fm").setup({
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    })
-  end,
+    "lvim-tech/lvim-fm",
+    requires = { "lvim-tech/lvim-shell" },
+    config = function()
+        require("lvim-fm").setup({
+            -- your configuration comes here
+            -- or leave it empty to use the default settings
+            -- refer to the configuration section below
+        })
+    end,
 })
 ```
 
@@ -120,6 +120,7 @@ use({
     KEY_SEARCH_IN_FILES = "alt-w",
     KEY_TOGGLE_HIDDEN_FILES = "alt-h",
     KEY_TOGGLE_HELP = "alt-/",
+    KEY_OPEN_TERMINAL = "alt-t",
     KEY_COPY = "alt-y",
     KEY_CUT = "alt-o",
     KEY_DELETE = "alt-r",
@@ -161,6 +162,7 @@ use({
 | `<C-v>`   | Open file(s) with vsplit                  |
 | `<C-t>`   | Open file(s) in new tab                   |
 | `<C-q>`   | Open file(s) in quick fix list            |
+| `<M-t>`   | Open terminal from current path           |
 | `<M-y>`   | Copy mode                                 |
 | `<M-o>`   | Cut mode                                  |
 | `<M-r>`   | Delete mode                               |

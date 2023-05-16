@@ -28,6 +28,7 @@ KEYS
 | `<C-v>`   | Open file(s) with vsplit                  |
 | `<C-t>`   | Open file(s) in new tab                   |
 | `<C-q>`   | Open file(s) in quick fix list            |
+| `<M-t>`   | Open terminal from current path           |
 | `<M-y>`   | Copy mode                                 |
 | `<M-o>`   | Cut mode                                  |
 | `<M-r>`   | Delete mode                               |
