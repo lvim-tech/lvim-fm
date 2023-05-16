@@ -184,7 +184,6 @@ function post_action {
 			is_break=true
 		fi
 	fi
-	is_explorer=false
 }
 
 function post_action_search {
@@ -576,7 +575,6 @@ while :; do
 						-e 's/\[0m//g' \
 						-e 's/ //g'
 			)
-			is_explorer=true
 			post_action
 			if [[ $is_break == true ]]; then
 				break
