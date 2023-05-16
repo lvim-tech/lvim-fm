@@ -161,10 +161,60 @@ use({
 | `<C-x>`   | Open file(s) with split                   |
 | `<C-v>`   | Open file(s) with vsplit                  |
 | `<C-t>`   | Open file(s) in new tab                   |
-| `<C-q>`   | Open file(s) in quick fix list            |
+| `<M-q>`   | Open file(s) in quick fix list            |
 | `<M-t>`   | Open terminal from current path           |
 | `<M-y>`   | Copy mode                                 |
 | `<M-o>`   | Cut mode                                  |
 | `<M-r>`   | Delete mode                               |
 | `!`       | Execute Copy / Cut mode                   |
 | `<M-i>`   | Apply Paste (Copy / Cut) or Delete        |
+
+## Open files in current buffer
+
+1. Select files / folders
+2. Press "Enter"
+
+## Split files
+
+1. Select files / folders
+2. Press "C-x"
+
+## Vsplit files
+
+1. Select files / folders
+2. Press "C-v"
+
+## Open files in new tab
+
+1. Select files / folders
+2. Press "C-t"
+
+## Open files in quickfix list
+
+1. Select files / folders
+2. Press "M-q"
+
+## Copy files and folders
+
+1. Select files / folders
+2. Press "M-y" (switch to paste mode)
+3. Navigate to folder where you want to paste files / folders
+4. Press "!" (switch to execute mode)
+5. Select files / folder to confirm
+6. Press "M-i" to paste files / folders
+
+## Cut files and folders
+
+1. Select files / folders
+2. Press "M-o" (switch to paste mode) -- PASTE - CUT
+3. Navigate to folder where you want to paste files / folders
+4. Press "!" (switch to execute mode)
+5. Select files / folder to confirm
+6. Press "M-i" to paste files / folders
+
+## Delete files and folders
+
+1. Select files / folders
+2. Press "M-r" (switch to delete mode)
+3. Select files / folder to confirm
+4. Press "M-i" to delete files / folders
