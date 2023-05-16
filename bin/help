@@ -1,16 +1,43 @@
+=================
 LVIM FILE MANAGER
+=================
 
-EXPLORER
+KEYS
+====
 
-SEARCH FILES
+| Key       | Action                                    |
+| --------- | ----------------------------------------- |
+| `<M-m>`   | Menu                                      |
+| `<M-e>`   | Explorer                                  |
+| `<M-a>`   | Search directories and files              |
+| `<M-d>`   | Search directories                        |
+| `<M-f>`   | Search files                              |
+| `<M-w>`   | Search in files                           |
+| `<C-q>`   | Close                                     |
+| `<C-c>`   | Clear search                              |
+| `<C-d>`   | Scroll down preview                       |
+| `<C-u>`   | Scroll up preview                         |
+| `<M-,>`   | Save current directory                    |
+| `<M-.>`   | Delete saved directory and cd to PWD      |
+| `<M-p>`   | Toggle preview (show / hide)              |
+| `<M-h>`   | Toggle hidden files (show / hide)         |
+| `<M-l>`   | Toggle info (short / long) - for Explorer |
+| `<M-/>`   | Toggle help                               |
+| `<Enter>` | Open file(s) in current buf               |
+| `<C-x>`   | Open file(s) with split                   |
+| `<C-v>`   | Open file(s) with vsplit                  |
+| `<C-t>`   | Open file(s) in new tab                   |
+| `<C-q>`   | Open file(s) in quick fix list            |
+| `<M-y>`   | Copy mode                                 |
+| `<M-o>`   | Cut mode                                  |
+| `<M-r>`   | Delete mode                               |
+| `!`       | Execute Copy / Cut mode                   |
+| `<M-i>`   | Apply Paste (Copy / Cut) or Delete        |
 
-SEARCH DIRECTORIES
 
-SEARCH FILES AND DIRECTORIES
+COPY FILES AND FOLDERS
+======================
 
-SEARCH IN FILES
-
-COPY FILES AND FOLDERS:
 1. Select files / folders
 2. Press "M-y" (switch to paste mode)
 3. Navigate to folder where you want to paste files / folders
@@ -18,7 +45,10 @@ COPY FILES AND FOLDERS:
 5. Select files / folder to confirm
 6. Press "M-i" to paste files / folders
 
-CUT FILES AND FOLDERS:
+
+CUT FILES AND FOLDERS
+=====================
+
 1. Select files / folders
 2. Press "M-o" (switch to paste mode) -- PASTE - CUT
 3. Navigate to folder where you want to paste files / folders
@@ -26,7 +56,10 @@ CUT FILES AND FOLDERS:
 5. Select files / folder to confirm
 6. Press "M-i" to paste files / folders
 
+
 DELETE FILES AND FOLDERS
+========================
+
 1. Select files / folders
 2. Press "M-r" (switch to delete mode)
 3. Select files / folder to confirm

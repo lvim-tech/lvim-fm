@@ -72,15 +72,16 @@ use({
   on_close = {},
   on_open = {},
   mappings = {
-    vert_split = "<C-v>",
-    horz_split = "<C-h>",
+    split = "<C-x>",
+    vsplit = "<C-v>",
     tabedit = "<C-t>",
     edit = "<C-e>",
-    close = "<Esc>",
-    qf = "<C-q>",
+    close = "<C-q>",
+    qf = "<M-q>",
   },
   env = {
-    LVIM_FM_PATH = os.getenv("HOME") .. "/.config/lvim-fm",
+    LVIM_FM_CONFIG_PATH = os.getenv("HOME") .. "/.config/lvim-fm",
+    LVIM_FM_BIN_PATH = vim.fn.fnamemodify(debug.getinfo(1, "S").source:gsub("^@", ""), ":h:h"),
     REVERSE = "--reverse",
     ICON_MENU = "",
     ICON_EXPLORER = "󰙅",
@@ -101,7 +102,7 @@ use({
     SEARCH_FILES_WITH_OUT_HIDEN = "fd --color always --type f",
     SEARCH_IN_FILES_WITH_HIDDEN = "rg --no-heading -H --line-number --column --hidden --follow --color=always",
     SEARCH_IN_FILES_WITH_OUT_HIDDEN = "rg --no-heading -H --line-number --column --follow --color=always",
-    KEY_QUIT = "esc",
+    KEY_QUIT = "ctrl-q",
     KEY_CLEAR_QUERY = "ctrl-c",
     KEY_PREVIEW_DOWN = "ctrl-d",
     KEY_PREVIEW_UP = "ctrl-u",
@@ -118,6 +119,13 @@ use({
     KEY_SEARCH_FILES = "alt-f",
     KEY_SEARCH_IN_FILES = "alt-w",
     KEY_TOGGLE_HIDDEN_FILES = "alt-h",
+    KEY_TOGGLE_HELP = "alt-/",
+    KEY_COPY = "alt-y",
+    KEY_CUT = "alt-o",
+    KEY_DELETE = "alt-r",
+    KEY_PASTE = "alt-p",
+    KEY_EXECUTE = "!",
+    KEY_APPLY = "alt-i",
   },
 }
 ```
@@ -138,7 +146,7 @@ use({
 | `<M-d>`   | Search directories                        |
 | `<M-f>`   | Search files                              |
 | `<M-w>`   | Search in files                           |
-| `<Esc>`   | Close                                     |
+| `<C-q>`   | Close                                     |
 | `<C-c>`   | Clear search                              |
 | `<C-d>`   | Scroll down preview                       |
 | `<C-u>`   | Scroll up preview                         |
@@ -147,8 +155,14 @@ use({
 | `<M-p>`   | Toggle preview (show / hide)              |
 | `<M-h>`   | Toggle hidden files (show / hide)         |
 | `<M-l>`   | Toggle info (short / long) - for Explorer |
+| `<M-/>`   | Toggle help                               |
 | `<Enter>` | Open file(s) in current buf               |
 | `<C-x>`   | Open file(s) with split                   |
 | `<C-v>`   | Open file(s) with vsplit                  |
 | `<C-t>`   | Open file(s) in new tab                   |
 | `<C-q>`   | Open file(s) in quick fix list            |
+| `<M-y>`   | Copy mode                                 |
+| `<M-o>`   | Cut mode                                  |
+| `<M-r>`   | Delete mode                               |
+| `!`       | Execute Copy / Cut mode                   |
+| `<M-i>`   | Apply Paste (Copy / Cut) or Delete        |
