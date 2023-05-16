@@ -169,6 +169,50 @@ use({
 | `!`       | Execute Copy / Cut mode                   |
 | `<M-i>`   | Apply Paste (Copy / Cut) or Delete        |
 
+## Open menu
+
+1. Press "M-m"
+
+## Switch to Explorer
+
+1. Press "M-e"
+
+## Switch to Search directories and files
+
+1. Press "M-a"
+
+## Switch to Search directories
+
+1. Press "M-d"
+
+## Switch to Search files
+
+1. Press "M-f"
+
+## Switch to Search in files
+
+1. Press "M-w"
+
+## Toggle hidden files and directories
+
+1. Press "M-h"
+
+## Toggle preview
+
+1. Press "M-p"
+
+## Toggle info (short / long) - for Explorer
+
+1. Press "M-l"
+
+## Save current path
+
+1. Press "M-,"
+
+## Delete saved path and cd to PWD
+
+1. Press "M-."
+
 ## Open files in current buffer
 
 1. Select files / folders
