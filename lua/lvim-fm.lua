@@ -63,13 +63,13 @@ local config = {
         KEY_SEARCH_FILES = "alt-f",
         KEY_SEARCH_IN_FILES = "alt-w",
         KEY_TOGGLE_HIDDEN_FILES = "alt-h",
+        KEY_TOGGLE_HELP = "alt-/",
         KEY_COPY = "alt-y",
         KEY_CUT = "alt-o",
         KEY_DELETE = "alt-r",
         KEY_PASTE = "alt-p",
         KEY_EXECUTE = "!",
         KEY_APPLY = "alt-i",
-        KEY_TOGGLE_HELP = "alt-/",
     },
 }
 
