@@ -472,7 +472,6 @@ while :; do
 			IFS=$'\n' fzf \
 				"$REVERSE" \
 				--query="$1" \
-				--print-query \
 				--nth="$(get_column_to_search)" \
 				"${delimiter[@]}" \
 				"${separator[@]}" \
