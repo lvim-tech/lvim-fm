@@ -137,6 +137,7 @@ function get_column_to_search {
 }
 
 function post_action {
+	echo "$selected" >/tmp/lvim-shell-qf-title
 	is_break=false
 	directories=()
 	files=()
@@ -187,6 +188,7 @@ function post_action {
 }
 
 function post_action_search {
+	echo "$selected" >/tmp/lvim-shell-qf-title
 	is_break=false
 	files=()
 	clean_selected=$(echo "$selected" | sed "s/:.*//g")
@@ -473,6 +475,7 @@ while :; do
 			IFS=$'\n' fzf \
 				"$REVERSE" \
 				--query="$1" \
+				--print-query \
 				--nth="$(get_column_to_search)" \
 				"${delimiter[@]}" \
 				"${separator[@]}" \
