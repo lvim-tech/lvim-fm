@@ -15,7 +15,7 @@ if [[ ! -f $LVIM_FM_CONFIG_PATH/action ]]; then
 	echo "menu" >"$LVIM_FM_CONFIG_PATH/action"
 fi
 
-if [[ -f $LVIM_FM_CONFIG_PATH/mode ]]; then
+if [[ ! -f $LVIM_FM_CONFIG_PATH/mode ]]; then
 	echo "SELECT" >"$LVIM_FM_CONFIG_PATH/mode"
 fi
 
@@ -472,6 +472,7 @@ while :; do
 			IFS=$'\n' fzf \
 				"$REVERSE" \
 				--query="$1" \
+				--history="$LVIM_FM_CONFIG_PATH/history" \
 				--nth="$(get_column_to_search)" \
 				"${delimiter[@]}" \
 				"${separator[@]}" \
