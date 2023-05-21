@@ -48,7 +48,7 @@ local config = {
         SEARCH_IN_FILES_WITH_HIDDEN = "rg --no-heading -H --smart-case --line-number --column --hidden --follow --color=always",
         SEARCH_IN_FILES_WITH_OUT_HIDDEN = "rg --no-heading -H --smart-case --line-number --column --follow --color=always",
         KEY_QUIT = "ctrl-q",
-        KEY_CLEAR_QUERY = "ctrl-c",
+        KEY_CLEAR_QUERY = "esc",
         KEY_PREVIEW_DOWN = "ctrl-d",
         KEY_PREVIEW_UP = "ctrl-u",
         KEY_PREVIEW_HALF_PAGE_DOWN = "ctrl-f",
