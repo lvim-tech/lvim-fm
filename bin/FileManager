@@ -204,13 +204,19 @@ function post_action_search {
 	else
 		if [[ ${#files[@]} != 0 ]]; then
 			for i in "${files[@]}"; do
-				echo "$PWD/$i" >>/tmp/lvim-shell
+				if [[ $i != "" ]]; then
+					echo "$PWD/$i" >>/tmp/lvim-shell
+					is_break=true
+				fi
 			done
-			is_break=true
 		fi
-		for i in "${selected[@]}"; do
-			echo "$i" >>/tmp/lvim-shell-qf
-		done
+		if [[ ${#files[@]} != 0 ]]; then
+			for i in "${selected[@]}"; do
+				if [[ $i != "" ]]; then
+					echo "$i" >>/tmp/lvim-shell-qf
+				fi
+			done
+		fi
 	fi
 }
 while :; do
