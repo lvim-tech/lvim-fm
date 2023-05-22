@@ -26,6 +26,7 @@ local config = {
     env = {
         LVIM_FM_CONFIG_PATH = os.getenv("HOME") .. "/.config/lvim-fm",
         LVIM_FM_BIN_PATH = vim.fn.fnamemodify(debug.getinfo(1, "S").source:gsub("^@", ""), ":h:h"),
+        ---@diagnostic disable-next-line: redundant-parameter
         TERM_DEFAULT = vim.api.nvim_get_option("term"),
         REVERSE = "--reverse",
         ICON_MENU = "",
@@ -45,8 +46,10 @@ local config = {
         SEARCH_DIRECTORIES_WITH_OUT_HIDEN = "fd --color always --type d",
         SEARCH_FILES_WITN_HIDEN = "fd -H --color always --type f",
         SEARCH_FILES_WITH_OUT_HIDEN = "fd --color always --type f",
-        SEARCH_IN_FILES_WITH_HIDDEN = "rg --no-heading -H --smart-case --line-number --column --hidden --follow --color=always",
-        SEARCH_IN_FILES_WITH_OUT_HIDDEN = "rg --no-heading -H --smart-case --line-number --column --follow --color=always",
+        SEARCH_IN_FILES_WITH_HIDDEN = "rg --no-heading -H --smart-case --line-number --column --hidden --follow"
+            .. " --color=always",
+        SEARCH_IN_FILES_WITH_OUT_HIDDEN = "rg --no-heading -H --smart-case --line-number --column --follow"
+            .. " --color=always",
         KEY_QUIT = "ctrl-q",
         KEY_CLEAR_QUERY = "esc",
         KEY_PREVIEW_DOWN = "ctrl-d",
