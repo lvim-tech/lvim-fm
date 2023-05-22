@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [[ $2 = "copy" ]]; then
 	for item in $1; do
