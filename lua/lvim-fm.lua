@@ -50,6 +50,7 @@ local config = {
             .. " --color=always",
         SEARCH_IN_FILES_WITH_OUT_HIDDEN = "rg --no-heading -H --smart-case --line-number --column --follow"
             .. " --color=always",
+        COLORS = "fg:#448589,bg:#1B2125,hl:#C94233,fg+:#448589,bg+:#1B2125,hl+:#C94233,pointer:#C94233,info:#E58C26,spinner:#E58C26,header:#C94233,prompt:#7F9858,marker:#C94233",
         KEY_QUIT = "ctrl-q",
         KEY_CLEAR_QUERY = "esc",
         KEY_PREVIEW_DOWN = "ctrl-d",

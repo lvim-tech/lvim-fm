@@ -222,6 +222,7 @@ function post_action_search {
 while :; do
 	action=$(cat "$LVIM_FM_CONFIG_PATH/action")
 	mode=" [$(cat "$LVIM_FM_CONFIG_PATH/mode")] "
+	# color=("color=$COLORS")
 	separator=("--separator=")
 	header=("--header=")
 	info=("--inline-info")
@@ -480,6 +481,7 @@ while :; do
 				--query="$1" \
 				--history="$LVIM_FM_CONFIG_PATH/history" \
 				--nth="$(get_column_to_search)" \
+				--color="$COLORS" \
 				"${delimiter[@]}" \
 				"${separator[@]}" \
 				"${prompt[@]}" \
