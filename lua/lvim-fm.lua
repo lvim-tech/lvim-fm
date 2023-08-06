@@ -8,8 +8,8 @@ local config = {
             blend = 0,
             height = 1,
             width = 1,
-            x = 0.5,
-            y = 0.5,
+            x = 0,
+            y = 1,
         },
         split = "rightbelow new", -- `leftabove new`, `rightbelow new`, `leftabove vnew 24`, `rightbelow vnew 24`
     },
