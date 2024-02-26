@@ -26,8 +26,7 @@ local config = {
     env = {
         LVIM_FM_CONFIG_PATH = os.getenv("HOME") .. "/.config/lvim-fm",
         LVIM_FM_BIN_PATH = vim.fn.fnamemodify(debug.getinfo(1, "S").source:gsub("^@", ""), ":h:h"),
-        ---@diagnostic disable-next-line: redundant-parameter
-        TERM_DEFAULT = vim.api.nvim_get_option("term"),
+        TERM_DEFAULT = vim.fn.getwinvar(0, "&term"),
         REVERSE = "--reverse",
         ICON_MENU = "",
         ICON_EXPLORER = "󰙅",
