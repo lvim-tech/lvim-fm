@@ -16,7 +16,7 @@
 
 -   [LVIM SHELL](https://github.com/lvim-tech/lvim-shell)
 -   fzf
--   exa
+-   eza
 -   fd
 -   rg
 -   awk, rev, cut, sed, tr, tail
@@ -101,7 +101,7 @@ use({
     ICON_MARKER = "",
     ICON_PROMPT = "",
     ICON_SEPARATOR = "",
-    EXPLORER = "exa --group --icons --classify --colour=always --level 1",
+    EXPLORER = "eza --group --icons --classify --colour=always --level 1",
     SEARCH_DIRECTORIES_AND_FILES_WITN_HIDEN = "fd -H --color always",
     SEARCH_DIRECTORIES_AND_FILES_WITH_OUT_HIDEN = "fd --color always",
     SEARCH_DIRECTORIES_WITN_HIDEN = "fd -H --color always --type d",
