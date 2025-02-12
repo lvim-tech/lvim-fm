@@ -35,7 +35,7 @@ function print_fzf_header {
 }
 
 function explorer {
-	$EXPLORER $show_hidden_files_explorer $long_info "${1:-$PWD}" | sed "s/\*$//g"
+	$EXPLORER $long_info $show_hidden_files
 }
 
 function search_directories_and_files {
@@ -235,8 +235,7 @@ while :; do
 	tac=()
 	delimiter=()
 	long_info=""
-	show_hidden_files_explorer=""
-	show_hidden_files_preview=""
+	show_hidden_files=""
 	preview_window_hidden=()
 	preview_window=("--preview-window=right:50%:noborder")
 	on_change="--bind=change:top"
@@ -328,25 +327,27 @@ while :; do
 		preview_window_hidden=("--preview-window=:hidden")
 	fi
 	if [[ -f $LVIM_FM_CONFIG_PATH/hidden-files ]]; then
-		show_hidden_files_preview="--all"
+		show_hidden_files="--all"
+	fi
+	if [[ -f $LVIM_FM_CONFIG_PATH/long-info ]]; then
+        long_info="--long"
 	fi
 	preview_engine=("--preview=VAL={..}; [ -f {2} -o -d {2} ] && VAL={2}; test -f \$VAL; [ -f {9} -o -d {9} ] && VAL={9}; test -f \$VAL && \
         {
-            file -biz \$PWD/\$VAL | grep ^text &>/dev/null && {
             echo \$PWD/\$VAL | xargs bat --color=always --decorations=never;
-            }
         }  \
         || \
         { \
-            [ \$VAL != \$PWD ] && exa \
-            $show_hidden_files_preview \
+            [ \$VAL != \$PWD ] && eza \
+            $show_hidden_files \
             --group \
-            --oneline \
             --colour=always \
-            --icons \
+            --icons=always \
             --group-directories-first \
             --classify \
             --level 1 \
+            --oneline \
+            $long_info \
             \$VAL 2>/dev/null
         }"
 	)
@@ -457,15 +458,16 @@ while :; do
         } \
         || \
         { \
-            [ \$VAL != \$PWD ] && exa \
-            $show_hidden_files_preview \
+            [ \$VAL != \$PWD ] && eza \
+            $show_hidden_files \
             --group \
-            --oneline \
             --colour=always \
-            --icons \
+            --icons=always \
             --group-directories-first \
             --classify \
             --level 1 \
+            --oneline \
+            $long_info \
             \$VAL 2>/dev/null
         }"
 		)

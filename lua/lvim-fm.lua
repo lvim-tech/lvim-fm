@@ -38,7 +38,7 @@ local config = {
         ICON_MARKER = "",
         ICON_PROMPT = "",
         ICON_SEPARATOR = "",
-        EXPLORER = "exa --group --icons --classify --colour=always --level 1",
+        EXPLORER = "eza --all --group --colour=always --icons=always --group-directories-first --classify --level --oneline",
         SEARCH_DIRECTORIES_AND_FILES_WITN_HIDEN = "fd -H --color always",
         SEARCH_DIRECTORIES_AND_FILES_WITH_OUT_HIDEN = "fd --color always",
         SEARCH_DIRECTORIES_WITN_HIDEN = "fd -H --color always --type d",
