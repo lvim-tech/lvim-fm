@@ -483,7 +483,10 @@ while :; do
 				--query="$1" \
 				--history="$LVIM_FM_CONFIG_PATH/history" \
 				--nth="$(get_column_to_search)" \
+                --highlight-line \
+                --ansi \
 				--color="$COLORS" \
+                --preview-window=noborder \
 				"${delimiter[@]}" \
 				"${separator[@]}" \
 				"${prompt[@]}" \
