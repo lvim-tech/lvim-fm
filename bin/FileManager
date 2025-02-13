@@ -426,9 +426,6 @@ while :; do
 	elif [[ $action = "explorer" ]]; then
 		header=("--header=$ICON_EXPLORER EXPLORER$mode$ICON_SEPARATOR $PWD")
 		prompt=("--prompt=  Browse $ICON_PROMPT ")
-		if [[ -f $LVIM_FM_CONFIG_PATH/hidden-files ]]; then
-			show_hidden_files_explorer="-a"
-		fi
 	elif [[ $action = "search-directories-and-files" ]]; then
 		header=("--header=$ICON_SEARCH_DIRECTORIES_AND_FILES SEARCH DIRECTORIES AND FILES$mode$ICON_SEPARATOR $PWD")
 		prompt=("--prompt=  Search $ICON_PROMPT ")
