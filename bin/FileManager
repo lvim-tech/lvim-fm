@@ -296,6 +296,12 @@ while :; do
             && touch $LVIM_FM_CONFIG_PATH/hidden-files \
             || rm $LVIM_FM_CONFIG_PATH/hidden-files \
         )+top+accept"
+        "--bind=$KEY_LONG_PATH:clear-selection+execute-silent( \
+                touch $LVIM_FM_CONFIG_PATH/prevent && \
+                [ ! -f $LVIM_FM_CONFIG_PATH/long-info ] \
+                && touch $LVIM_FM_CONFIG_PATH/long-info \
+                || rm $LVIM_FM_CONFIG_PATH/long-info \
+            )+top+accept"
 		"--bind=$KEY_EXECUTE:execute( \
             ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'PASTE/COPY' ] \
             && echo 'EXECUTE/PASTE/COPY' >$LVIM_FM_CONFIG_PATH/mode) \
@@ -330,7 +336,10 @@ while :; do
 		show_hidden_files="--all"
 	fi
 	if [[ -f $LVIM_FM_CONFIG_PATH/long-info ]]; then
-        long_info="--long"
+		long_info="--long"
+	fi
+	if [[ -f $LVIM_FM_CONFIG_PATH/long-info ]]; then
+		long_info="--long"
 	fi
 	preview_engine=("--preview=VAL={..}; [ -f {2} -o -d {2} ] && VAL={2}; test -f \$VAL; [ -f {9} -o -d {9} ] && VAL={9}; test -f \$VAL && \
         {
@@ -417,19 +426,8 @@ while :; do
 	elif [[ $action = "explorer" ]]; then
 		header=("--header=$ICON_EXPLORER EXPLORER$mode$ICON_SEPARATOR $PWD")
 		prompt=("--prompt=  Browse $ICON_PROMPT ")
-		bind_app=(
-			"--bind=$KEY_EXPLORER_LONG_PATH:clear-selection+execute-silent( \
-                touch $LVIM_FM_CONFIG_PATH/prevent && \
-                [ ! -f $LVIM_FM_CONFIG_PATH/long-info ] \
-                && touch $LVIM_FM_CONFIG_PATH/long-info \
-                || rm $LVIM_FM_CONFIG_PATH/long-info \
-            )+top+accept"
-		)
 		if [[ -f $LVIM_FM_CONFIG_PATH/hidden-files ]]; then
 			show_hidden_files_explorer="-a"
-		fi
-		if [[ -f $LVIM_FM_CONFIG_PATH/long-info ]]; then
-			long_info="--long"
 		fi
 	elif [[ $action = "search-directories-and-files" ]]; then
 		header=("--header=$ICON_SEARCH_DIRECTORIES_AND_FILES SEARCH DIRECTORIES AND FILES$mode$ICON_SEPARATOR $PWD")
@@ -483,10 +481,10 @@ while :; do
 				--query="$1" \
 				--history="$LVIM_FM_CONFIG_PATH/history" \
 				--nth="$(get_column_to_search)" \
-                --highlight-line \
-                --ansi \
+				--highlight-line \
+				--ansi \
 				--color="$COLORS" \
-                --preview-window=noborder \
+				--preview-window=noborder \
 				"${delimiter[@]}" \
 				"${separator[@]}" \
 				"${prompt[@]}" \
