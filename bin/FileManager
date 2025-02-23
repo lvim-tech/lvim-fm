@@ -8,289 +8,289 @@ chmod 777 "$LVIM_FM_CONFIG_PATH"
 echo "$PWD" >"$LVIM_FM_CONFIG_PATH/base-directory"
 
 if [[ -f $LVIM_FM_CONFIG_PATH/pwd ]]; then
-	builtin cd "$(cat "$LVIM_FM_CONFIG_PATH/pwd")" || return
+    builtin cd "$(cat "$LVIM_FM_CONFIG_PATH/pwd")" || return
 fi
 
 if [[ ! -f $LVIM_FM_CONFIG_PATH/action ]]; then
-	echo "menu" >"$LVIM_FM_CONFIG_PATH/action"
+    echo "menu" >"$LVIM_FM_CONFIG_PATH/action"
 fi
 
 if [[ ! -f $LVIM_FM_CONFIG_PATH/mode ]]; then
-	echo "SELECT" >"$LVIM_FM_CONFIG_PATH/mode"
+    echo "SELECT" >"$LVIM_FM_CONFIG_PATH/mode"
 fi
 
 cat /dev/null >"$LVIM_FM_CONFIG_PATH"/mode-items
 
 function print_fzf_menu {
-	echo "$ICON_EXPLORER" EXPLORER
-	echo "$ICON_SEARCH_DIRECTORIES_AND_FILES" SEARCH DIRECTORIES AND FILES
-	echo "$ICON_SEARCH_DIRECTORIES" SEARCH DIRECTORIES
-	echo "$ICON_SEARCH_FILES" SEARCH FILES
-	echo "$ICON_SEARCH_IN_FILES" SEARCH IN FILES
+    echo "$ICON_EXPLORER" EXPLORER
+    echo "$ICON_SEARCH_DIRECTORIES_AND_FILES" SEARCH DIRECTORIES AND FILES
+    echo "$ICON_SEARCH_DIRECTORIES" SEARCH DIRECTORIES
+    echo "$ICON_SEARCH_FILES" SEARCH FILES
+    echo "$ICON_SEARCH_IN_FILES" SEARCH IN FILES
 }
 
 function print_fzf_header {
-	echo " ."
-	[[ $PWD = "/" ]] && echo "/" || echo " .."
+    echo " ."
+    [[ $PWD = "/" ]] && echo "/" || echo " .."
 }
 
 function explorer {
-	$EXPLORER $long_info $show_hidden_files
+    $EXPLORER $long_info $show_hidden_files
 }
 
 function search_directories_and_files {
-	if [[ -f "$LVIM_FM_CONFIG_PATH/hidden-files" ]]; then
-		$SEARCH_DIRECTORIES_AND_FILES_WITN_HIDEN
-	else
-		$SEARCH_DIRECTORIES_AND_FILES_WITH_OUT_HIDEN
-	fi
+    if [[ -f "$LVIM_FM_CONFIG_PATH/hidden-files" ]]; then
+        $SEARCH_DIRECTORIES_AND_FILES_WITN_HIDEN
+    else
+        $SEARCH_DIRECTORIES_AND_FILES_WITH_OUT_HIDEN
+    fi
 }
 
 function search_directories {
-	if [[ -f "$LVIM_FM_CONFIG_PATH/hidden-files" ]]; then
-		$SEARCH_DIRECTORIES_WITN_HIDEN
-	else
-		$SEARCH_DIRECTORIES_WITH_OUT_HIDEN
-	fi
+    if [[ -f "$LVIM_FM_CONFIG_PATH/hidden-files" ]]; then
+        $SEARCH_DIRECTORIES_WITN_HIDEN
+    else
+        $SEARCH_DIRECTORIES_WITH_OUT_HIDEN
+    fi
 }
 
 function search_files {
-	if [[ -f "$LVIM_FM_CONFIG_PATH/hidden-files" ]]; then
-		$SEARCH_FILES_WITN_HIDEN
-	else
-		$SEARCH_FILES_WITH_OUT_HIDEN
-	fi
+    if [[ -f "$LVIM_FM_CONFIG_PATH/hidden-files" ]]; then
+        $SEARCH_FILES_WITN_HIDEN
+    else
+        $SEARCH_FILES_WITH_OUT_HIDEN
+    fi
 }
 
 function search_in_files {
-	if [[ -f $LVIM_FM_CONFIG_PATH/hidden-files ]]; then
-		$SEARCH_IN_FILES_WITH_HIDDEN -n ${list_files:+-l} "$1"
-	else
-		$SEARCH_IN_FILES_WITH_OUT_HIDDEN -n ${list_files:+-l} "$1"
-	fi
+    if [[ -f $LVIM_FM_CONFIG_PATH/hidden-files ]]; then
+        $SEARCH_IN_FILES_WITH_HIDDEN -n ${list_files:+-l} "$1"
+    else
+        $SEARCH_IN_FILES_WITH_OUT_HIDDEN -n ${list_files:+-l} "$1"
+    fi
 }
 
 function print_pre_proccess {
-	cat "$LVIM_FM_CONFIG_PATH"/mode-items
+    cat "$LVIM_FM_CONFIG_PATH"/mode-items
 }
 
 function proccess_copy {
-	"$LVIM_FM_BIN_PATH"/bin/Execute "$selected" copy
-	cat /dev/null >"$LVIM_FM_CONFIG_PATH"/mode-items
-	echo 'SELECT' >"$LVIM_FM_CONFIG_PATH"/mode
+    "$LVIM_FM_BIN_PATH"/bin/Execute "$selected" copy
+    cat /dev/null >"$LVIM_FM_CONFIG_PATH"/mode-items
+    echo 'SELECT' >"$LVIM_FM_CONFIG_PATH"/mode
 }
 
 function proccess_cut {
-	"$LVIM_FM_BIN_PATH"/bin/Execute "$selected" cut
-	cat /dev/null >"$LVIM_FM_CONFIG_PATH"/mode-items
-	echo 'SELECT' >"$LVIM_FM_CONFIG_PATH"/mode
+    "$LVIM_FM_BIN_PATH"/bin/Execute "$selected" cut
+    cat /dev/null >"$LVIM_FM_CONFIG_PATH"/mode-items
+    echo 'SELECT' >"$LVIM_FM_CONFIG_PATH"/mode
 }
 
 function proccess_delete {
-	"$LVIM_FM_BIN_PATH"/bin/Execute "$selected" delete
-	cat /dev/null >"$LVIM_FM_CONFIG_PATH"/mode-items
-	echo 'SELECT' >"$LVIM_FM_CONFIG_PATH"/mode
+    "$LVIM_FM_BIN_PATH"/bin/Execute "$selected" delete
+    cat /dev/null >"$LVIM_FM_CONFIG_PATH"/mode-items
+    echo 'SELECT' >"$LVIM_FM_CONFIG_PATH"/mode
 }
 
 function get_list_for_fzf {
-	if [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'PROCCESS/COPY' ]]; then
-		proccess_copy "$1"
-	elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'PROCCESS/CUT' ]]; then
-		proccess_cut "$1"
-	elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'PROCCESS/DELETE' ]]; then
-		proccess_delete "$1"
-	elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/PASTE/COPY' ]]; then
-		print_pre_proccess "$1"
-	elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/PASTE/CUT' ]]; then
-		print_pre_proccess "$1"
-	elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/DELETE' ]]; then
-		print_pre_proccess "$1"
-	elif [[ $action = "menu" ]]; then
-		print_fzf_menu "$1"
-	elif [[ $action = "explorer" ]]; then
-		print_fzf_header "$1"
-		explorer "$1"
-	elif [[ $action = "search-directories-and-files" ]]; then
-		print_fzf_header "$1"
-		search_directories_and_files "$1"
-	elif [[ $action = "search-directories" ]]; then
-		print_fzf_header "$1"
-		search_directories "$1"
-	elif [[ $action = "search-files" ]]; then
-		print_fzf_header "$1"
-		search_files "$1"
-	elif [[ $action = "search-in-files" ]]; then
-		search_in_files "$1"
-	fi
+    if [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'PROCCESS/COPY' ]]; then
+        proccess_copy "$1"
+    elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'PROCCESS/CUT' ]]; then
+        proccess_cut "$1"
+    elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'PROCCESS/DELETE' ]]; then
+        proccess_delete "$1"
+    elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/PASTE/COPY' ]]; then
+        print_pre_proccess "$1"
+    elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/PASTE/CUT' ]]; then
+        print_pre_proccess "$1"
+    elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/DELETE' ]]; then
+        print_pre_proccess "$1"
+    elif [[ $action = "menu" ]]; then
+        print_fzf_menu "$1"
+    elif [[ $action = "explorer" ]]; then
+        print_fzf_header "$1"
+        explorer "$1"
+    elif [[ $action = "search-directories-and-files" ]]; then
+        print_fzf_header "$1"
+        search_directories_and_files "$1"
+    elif [[ $action = "search-directories" ]]; then
+        print_fzf_header "$1"
+        search_directories "$1"
+    elif [[ $action = "search-files" ]]; then
+        print_fzf_header "$1"
+        search_files "$1"
+    elif [[ $action = "search-in-files" ]]; then
+        search_in_files "$1"
+    fi
 }
 
 function get_column_to_search {
-	# local nth=1
-	if [[ $action = "explorer" ]] && [[ -f $LVIM_FM_CONFIG_PATH/long-info ]]; then
-		nth='8..-1'
-	elif [[ $action = "explorer" ]] && [[ ! -f $LVIM_FM_CONFIG_PATH/long-info ]]; then
-		nth='2..-1'
-	else
-		nth=".."
-	fi
-	echo -n $nth
+    # local nth=1
+    if [[ $action = "explorer" ]] && [[ -f $LVIM_FM_CONFIG_PATH/long-info ]]; then
+        nth='8..-1'
+    elif [[ $action = "explorer" ]] && [[ ! -f $LVIM_FM_CONFIG_PATH/long-info ]]; then
+        nth='2..-1'
+    else
+        nth=".."
+    fi
+    echo -n $nth
 }
 
 function post_action {
-	is_break=false
-	directories=()
-	files=()
-	if [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) == "COPY" ]] || [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) == "CUT" ]] || [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) == "DELETE" ]]; then
-		for result in $selected; do
-			if [[ -d $result ]] && [[ $result != "." ]] && [[ $result != ".." ]]; then
-				directories+=("$PWD/$result")
-			elif [[ -f $result ]]; then
-				files+=("$PWD/$result")
-			fi
-		done
-		if [[ ${#directories[@]} != 0 ]] || [[ ${#files[@]} != 0 ]]; then
-			for i in "${directories[@]}"; do
-				if [[ ${i: -1} != "." ]]; then
-					echo "$i" >>"$LVIM_FM_CONFIG_PATH"/mode-items
-				fi
-			done
-			for i in "${files[@]}"; do
-				echo "$i" >>"$LVIM_FM_CONFIG_PATH"/mode-items
-			done
-			if [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) == "DELETE" ]]; then
-				echo "EXECUTE/DELETE" >"$LVIM_FM_CONFIG_PATH"/mode
-			else
-				echo "PASTE/$(cat "$LVIM_FM_CONFIG_PATH"/mode)" >"$LVIM_FM_CONFIG_PATH"/mode
+    is_break=false
+    directories=()
+    files=()
+    if [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) == "COPY" ]] || [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) == "CUT" ]] || [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) == "DELETE" ]]; then
+        for result in $selected; do
+            if [[ -d $result ]] && [[ $result != "." ]] && [[ $result != ".." ]]; then
+                directories+=("$PWD/$result")
+            elif [[ -f $result ]]; then
+                files+=("$PWD/$result")
+            fi
+        done
+        if [[ ${#directories[@]} != 0 ]] || [[ ${#files[@]} != 0 ]]; then
+            for i in "${directories[@]}"; do
+                if [[ ${i: -1} != "." ]]; then
+                    echo "$i" >>"$LVIM_FM_CONFIG_PATH"/mode-items
+                fi
+            done
+            for i in "${files[@]}"; do
+                echo "$i" >>"$LVIM_FM_CONFIG_PATH"/mode-items
+            done
+            if [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) == "DELETE" ]]; then
+                echo "EXECUTE/DELETE" >"$LVIM_FM_CONFIG_PATH"/mode
+            else
+                echo "PASTE/$(cat "$LVIM_FM_CONFIG_PATH"/mode)" >"$LVIM_FM_CONFIG_PATH"/mode
 
-			fi
-		else
-			echo 'SELECT' >"$LVIM_FM_CONFIG_PATH"/mode
-		fi
-	else
-		for result in $selected; do
-			if [[ -d $result ]]; then
-				directories+=("$PWD/$result")
-			elif [[ -f $result ]]; then
-				files+=("$PWD/$result")
-			fi
-		done
-		if [[ ${#directories[@]} -gt 0 ]]; then
-			builtin cd "${directories[-1]}" || return
-		fi
-		if [[ ${#files[@]} != 0 ]]; then
-			for i in "${files[@]}"; do
-				echo "$i" >>/tmp/lvim-shell
-			done
-			is_break=true
-		fi
-	fi
+            fi
+        else
+            echo 'SELECT' >"$LVIM_FM_CONFIG_PATH"/mode
+        fi
+    else
+        for result in $selected; do
+            if [[ -d $result ]]; then
+                directories+=("$PWD/$result")
+            elif [[ -f $result ]]; then
+                files+=("$PWD/$result")
+            fi
+        done
+        if [[ ${#directories[@]} -gt 0 ]]; then
+            builtin cd "${directories[-1]}" || return
+        fi
+        if [[ ${#files[@]} != 0 ]]; then
+            for i in "${files[@]}"; do
+                echo "$i" >>/tmp/lvim-shell
+            done
+            is_break=true
+        fi
+    fi
 }
 
 function post_action_search {
-	is_break=false
-	files=()
-	clean_selected=$(echo "$selected" | sed "s/:.*//g")
-	for result in $clean_selected; do
-		files+=("$result")
-	done
-	mapfile -t files < <(echo "${files[@]}" | awk 'BEGIN{RS=" ";} !a[$1]++ {print $1}')
-	if [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) == "COPY" ]] || [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) == "CUT" ]]; then
-		if [[ ${#files[@]} != 0 ]]; then
-			for i in "${files[@]}"; do
-				echo "$PWD/$i" >>"$LVIM_FM_CONFIG_PATH"/mode-items
-			done
-			echo 'PASTE' >"$LVIM_FM_CONFIG_PATH"/mode
-		fi
-	else
-		if [[ ${#files[@]} != 0 ]]; then
-			for i in "${files[@]}"; do
-				if [[ $i != "" ]]; then
-					echo "$PWD/$i" >>/tmp/lvim-shell
-					is_break=true
-				fi
-			done
-		fi
-		if [[ ${#files[@]} != 0 ]]; then
-			for i in "${selected[@]}"; do
-				if [[ $i != "" ]]; then
-					echo "$i" >>/tmp/lvim-shell-qf
-				fi
-			done
-		fi
-	fi
+    is_break=false
+    files=()
+    clean_selected=$(echo "$selected" | sed "s/:.*//g")
+    for result in $clean_selected; do
+        files+=("$result")
+    done
+    mapfile -t files < <(echo "${files[@]}" | awk 'BEGIN{RS=" ";} !a[$1]++ {print $1}')
+    if [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) == "COPY" ]] || [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) == "CUT" ]]; then
+        if [[ ${#files[@]} != 0 ]]; then
+            for i in "${files[@]}"; do
+                echo "$PWD/$i" >>"$LVIM_FM_CONFIG_PATH"/mode-items
+            done
+            echo 'PASTE' >"$LVIM_FM_CONFIG_PATH"/mode
+        fi
+    else
+        if [[ ${#files[@]} != 0 ]]; then
+            for i in "${files[@]}"; do
+                if [[ $i != "" ]]; then
+                    echo "$PWD/$i" >>/tmp/lvim-shell
+                    is_break=true
+                fi
+            done
+        fi
+        if [[ ${#files[@]} != 0 ]]; then
+            for i in "${selected[@]}"; do
+                if [[ $i != "" ]]; then
+                    echo "$i" >>/tmp/lvim-shell-qf
+                fi
+            done
+        fi
+    fi
 }
 while :; do
-	action=$(cat "$LVIM_FM_CONFIG_PATH/action")
-	mode=" [$(cat "$LVIM_FM_CONFIG_PATH/mode")] "
-	# color=("color=$COLORS")
-	separator=("--separator=")
-	header=("--header=")
-	info=("--inline-info")
-	no_border=("--no-border")
-	border=("--border=none")
-	pointer=("--pointer=$ICON_POINTER")
-	marker=("--marker=$ICON_MARKER")
-	multi=("-m")
-	sort=("-s")
-	tac=()
-	delimiter=()
-	long_info=""
-	show_hidden_files=""
-	preview_window_hidden=()
-	preview_window=("--preview-window=right:50%:noborder")
-	on_change="--bind=change:top"
-	reload=()
-	preview_window_for_search_in_files=()
-	enter=("--bind=enter:accept+execute(echo {q} >/tmp/lvim-shell-query)")
-	bind_base=(
-		"--bind=$KEY_QUIT:clear-selection+execute(echo QUIT)+abort"
-		"--bind=$KEY_CLEAR_QUERY:clear-selection+clear-query"
-		"--bind=$KEY_PREVIEW_DOWN:preview-down,$KEY_PREVIEW_UP:preview-up,$KEY_PREVIEW_HALF_PAGE_DOWN:preview-half-page-down,$KEY_PREVIEW_HALF_PAGE_UP:preview-half-page-up"
-		"--bind=$KEY_TOGGLE_PREVIEW:toggle-preview+execute-silent( \
+    action=$(cat "$LVIM_FM_CONFIG_PATH/action")
+    mode=" [$(cat "$LVIM_FM_CONFIG_PATH/mode")] "
+    # color=("color=$COLORS")
+    separator=("--separator=")
+    header=("--header=")
+    info=("--inline-info")
+    no_border=("--no-border")
+    border=("--border=none")
+    pointer=("--pointer=$ICON_POINTER")
+    marker=("--marker=$ICON_MARKER")
+    multi=("-m")
+    sort=("-s")
+    tac=()
+    delimiter=()
+    long_info=""
+    show_hidden_files=""
+    preview_window_hidden=()
+    preview_window=("--preview-window=right:50%:noborder")
+    on_change="--bind=change:top"
+    reload=()
+    preview_window_for_search_in_files=()
+    enter=("--bind=enter:accept+execute(echo {q} >/tmp/lvim-shell-query)")
+    bind_base=(
+        "--bind=$KEY_QUIT:clear-selection+execute(echo QUIT)+abort"
+        "--bind=$KEY_CLEAR_QUERY:clear-selection+clear-query"
+        "--bind=$KEY_PREVIEW_DOWN:preview-down,$KEY_PREVIEW_UP:preview-up,$KEY_PREVIEW_HALF_PAGE_DOWN:preview-half-page-down,$KEY_PREVIEW_HALF_PAGE_UP:preview-half-page-up"
+        "--bind=$KEY_TOGGLE_PREVIEW:toggle-preview+execute-silent( \
             touch $LVIM_FM_CONFIG_PATH/prevent && \
             [ ! -f $LVIM_FM_CONFIG_PATH/hidden-preview ] \
             && touch $LVIM_FM_CONFIG_PATH/hidden-preview \
             || rm $LVIM_FM_CONFIG_PATH/hidden-preview)"
-		"--bind=$KEY_TOGGLE_HELP:execute-silent( \
+        "--bind=$KEY_TOGGLE_HELP:execute-silent( \
             touch $LVIM_FM_CONFIG_PATH/prevent && \
             [ ! -f $LVIM_FM_CONFIG_PATH/show-help ] \
             && touch $LVIM_FM_CONFIG_PATH/show-help \
             || rm $LVIM_FM_CONFIG_PATH/show-help \
         )+accept"
-		"--bind=$KEY_SAVE_CURRENT_PATH:execute-silent( \
+        "--bind=$KEY_SAVE_CURRENT_PATH:execute-silent( \
             touch $LVIM_FM_CONFIG_PATH/prevent && \
             echo $PWD > $LVIM_FM_CONFIG_PATH/pwd \
         )+top+accept"
-		"--bind=$KEY_DELETE_CURRENT_PATH:abort+clear-selection+execute-silent( \
+        "--bind=$KEY_DELETE_CURRENT_PATH:clear-selection+execute-silent( \
             touch $LVIM_FM_CONFIG_PATH/prevent && \
             touch $LVIM_FM_CONFIG_PATH/reload && \
             rm $LVIM_FM_CONFIG_PATH/pwd \
         )+top+accept"
-		"--bind=$KEY_MENU:abort+clear-selection+execute-silent( \
+        "--bind=$KEY_MENU:clear-selection+execute-silent( \
             touch $LVIM_FM_CONFIG_PATH/prevent && \
             echo menu > $LVIM_FM_CONFIG_PATH/action \
         )"
-		"--bind=$KEY_EXPLORER:abort+clear-selection+execute-silent( \
+        "--bind=$KEY_EXPLORER:clear-selection+execute-silent( \
             touch $LVIM_FM_CONFIG_PATH/prevent && \
             echo explorer > $LVIM_FM_CONFIG_PATH/action \
         )+top+accept"
-		"--bind=$KEY_SEARCH_DIRECTORIES_AND_FILES:abort+clear-selection+execute-silent( \
+        "--bind=$KEY_SEARCH_DIRECTORIES_AND_FILES:clear-selection+execute-silent( \
             touch $LVIM_FM_CONFIG_PATH/prevent && \
             echo search-directories-and-files > $LVIM_FM_CONFIG_PATH/action \
         )+top+accept"
-		"--bind=$KEY_SEARCH_DIRECTORIES:abort+clear-selection+execute-silent( \
+        "--bind=$KEY_SEARCH_DIRECTORIES:clear-selection+execute-silent( \
             touch $LVIM_FM_CONFIG_PATH/prevent && \
             echo search-directories > $LVIM_FM_CONFIG_PATH/action \
         )+top+accept"
-		"--bind=$KEY_SEARCH_FILES:abort+clear-selection+execute-silent( \
+        "--bind=$KEY_SEARCH_FILES:clear-selection+execute-silent( \
             touch $LVIM_FM_CONFIG_PATH/prevent && \
             echo search-files > $LVIM_FM_CONFIG_PATH/action \
         )+top+accept"
-		"--bind=$KEY_SEARCH_IN_FILES:abort+clear-selection+execute-silent( \
+        "--bind=$KEY_SEARCH_IN_FILES:clear-selection+execute-silent( \
             touch $LVIM_FM_CONFIG_PATH/prevent && \
             echo search-in-files > $LVIM_FM_CONFIG_PATH/action \
         )+top+accept"
-		"--bind=$KEY_TOGGLE_HIDDEN_FILES:clear-selection+execute-silent(\
+        "--bind=$KEY_TOGGLE_HIDDEN_FILES:clear-selection+execute-silent(\
             touch $LVIM_FM_CONFIG_PATH/prevent && \
             [ ! -f $LVIM_FM_CONFIG_PATH/hidden-files ] \
             && touch $LVIM_FM_CONFIG_PATH/hidden-files \
@@ -302,46 +302,46 @@ while :; do
                 && touch $LVIM_FM_CONFIG_PATH/long-info \
                 || rm $LVIM_FM_CONFIG_PATH/long-info \
             )+top+accept"
-		"--bind=$KEY_EXECUTE:execute( \
+        "--bind=$KEY_EXECUTE:execute( \
             ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'PASTE/COPY' ] \
             && echo 'EXECUTE/PASTE/COPY' >$LVIM_FM_CONFIG_PATH/mode) \
             || ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'PASTE/CUT' ] \
             && echo 'EXECUTE/PASTE/CUT' >$LVIM_FM_CONFIG_PATH/mode) \
         )+top+accept"
-		"--bind=$KEY_COPY:execute( \
+        "--bind=$KEY_COPY:execute( \
             ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'PASTE/COPY' ] \
             && (echo 'SELECT' >$LVIM_FM_CONFIG_PATH/mode \
             && cat /dev/null > $LVIM_FM_CONFIG_PATH/mode-items)) \
             || ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'SELECT' ] \
             && echo 'COPY' >$LVIM_FM_CONFIG_PATH/mode) \
         )+top+accept"
-		"--bind=$KEY_CUT:execute( \
+        "--bind=$KEY_CUT:execute( \
             ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'PASTE/CUT' ] \
             && (echo 'SELECT' >$LVIM_FM_CONFIG_PATH/mode \
             && cat /dev/null > $LVIM_FM_CONFIG_PATH/mode-items)) \
             || ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'SELECT' ] \
             && echo 'CUT' >$LVIM_FM_CONFIG_PATH/mode) \
         )+top+accept"
-		"--bind=$KEY_OPEN_TERMINAL:execute-silent($TERM_DEFAULT)"
-		"--bind=$KEY_DELETE:execute( \
+        "--bind=$KEY_OPEN_TERMINAL:execute-silent($TERM_DEFAULT)"
+        "--bind=$KEY_DELETE:execute( \
             ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'SELECT' ] \
             && echo 'DELETE' >$LVIM_FM_CONFIG_PATH/mode) \
         )+top+accept"
-	)
-	bind_app=()
-	if [[ -f $LVIM_FM_CONFIG_PATH/hidden-preview ]]; then
-		preview_window_hidden=("--preview-window=:hidden")
-	fi
-	if [[ -f $LVIM_FM_CONFIG_PATH/hidden-files ]]; then
-		show_hidden_files="--all"
-	fi
-	if [[ -f $LVIM_FM_CONFIG_PATH/long-info ]]; then
-		long_info="--long"
-	fi
-	if [[ -f $LVIM_FM_CONFIG_PATH/long-info ]]; then
-		long_info="--long"
-	fi
-	preview_engine=("--preview=VAL={..}; [ -f {2} -o -d {2} ] && VAL={2}; test -f \$VAL; [ -f {9} -o -d {9} ] && VAL={9}; test -f \$VAL && \
+    )
+    bind_app=()
+    if [[ -f $LVIM_FM_CONFIG_PATH/hidden-preview ]]; then
+        preview_window_hidden=("--preview-window=:hidden")
+    fi
+    if [[ -f $LVIM_FM_CONFIG_PATH/hidden-files ]]; then
+        show_hidden_files="--all"
+    fi
+    if [[ -f $LVIM_FM_CONFIG_PATH/long-info ]]; then
+        long_info="--long"
+    fi
+    if [[ -f $LVIM_FM_CONFIG_PATH/long-info ]]; then
+        long_info="--long"
+    fi
+    preview_engine=("--preview=VAL={..}; [ -f {2} -o -d {2} ] && VAL={2}; test -f \$VAL; [ -f {9} -o -d {9} ] && VAL={9}; test -f \$VAL && \
         {
             echo \$PWD/\$VAL | xargs bat --color=always --decorations=never;
         }  \
@@ -359,93 +359,93 @@ while :; do
             $long_info \
             \$VAL 2>/dev/null
         }"
-	)
-	if [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/PASTE/COPY' ]]; then
-		header=("--header=PASTE FILES IN $PWD")
-		enter=()
-		bind_app=(
-			"--bind=enter:"
-			"--bind=$KEY_EXECUTE:execute( \
+    )
+    if [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/PASTE/COPY' ]]; then
+        header=("--header=PASTE FILES IN $PWD")
+        enter=()
+        bind_app=(
+            "--bind=enter:"
+            "--bind=$KEY_EXECUTE:execute( \
                 touch $LVIM_FM_CONFIG_PATH/prevent && \
                 ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/PASTE/COPY' ] \
                 && echo 'PASTE/COPY' >$LVIM_FM_CONFIG_PATH/mode) \
             )+top+accept"
-			"--bind=$KEY_COPY:execute( \
+            "--bind=$KEY_COPY:execute( \
                 touch $LVIM_FM_CONFIG_PATH/prevent && \
                 ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/PASTE/COPY' ] \
                 && (echo 'SELECT' >$LVIM_FM_CONFIG_PATH/mode \
                 && cat /dev/null > $LVIM_FM_CONFIG_PATH/mode-items)) \
             )+top+accept"
-			"--bind=$KEY_APPLY:execute( \
+            "--bind=$KEY_APPLY:execute( \
                 touch $LVIM_FM_CONFIG_PATH/prevent && \
                 echo 'PROCCESS/COPY' >$LVIM_FM_CONFIG_PATH/mode \
             )+top+accept"
-		)
-	elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/PASTE/CUT' ]]; then
-		header=("--header=PASTE FILES IN $PWD")
-		enter=()
-		bind_app=(
-			"--bind=enter:"
-			"--bind=$KEY_EXECUTE:execute( \
+        )
+    elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/PASTE/CUT' ]]; then
+        header=("--header=PASTE FILES IN $PWD")
+        enter=()
+        bind_app=(
+            "--bind=enter:"
+            "--bind=$KEY_EXECUTE:execute( \
                 touch $LVIM_FM_CONFIG_PATH/prevent && \
                 ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/PASTE/CUT' ] \
                 && echo 'PASTE/CUT' >$LVIM_FM_CONFIG_PATH/mode) \
             )+top+accept"
-			"--bind=$KEY_CUT:execute( \
+            "--bind=$KEY_CUT:execute( \
                 touch $LVIM_FM_CONFIG_PATH/prevent && \
                 ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/PASTE/CUT' ] \
                 && (echo 'SELECT' >$LVIM_FM_CONFIG_PATH/mode \
                 && cat /dev/null > $LVIM_FM_CONFIG_PATH/mode-items)) \
             )+top+accept"
-			"--bind=$KEY_APPLY:execute( \
+            "--bind=$KEY_APPLY:execute( \
                 touch $LVIM_FM_CONFIG_PATH/prevent && \
                 echo 'PROCCESS/CUT' >$LVIM_FM_CONFIG_PATH/mode \
             )+top+accept"
-		)
-	elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/DELETE' ]]; then
-		header=("--header=DELETE FILES")
-		enter=()
-		bind_app=(
-			"--bind=enter:"
-			"--bind=$KEY_DELETE:execute( \
+        )
+    elif [[ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/DELETE' ]]; then
+        header=("--header=DELETE FILES")
+        enter=()
+        bind_app=(
+            "--bind=enter:"
+            "--bind=$KEY_DELETE:execute( \
                 touch $LVIM_FM_CONFIG_PATH/prevent && \
                 ([ $(cat "$LVIM_FM_CONFIG_PATH"/mode) = 'EXECUTE/DELETE' ] \
                 && (echo 'SELECT' >$LVIM_FM_CONFIG_PATH/mode \
                 && cat /dev/null > $LVIM_FM_CONFIG_PATH/mode-items)) \
             )+top+accept"
-			"--bind=$KEY_APPLY:execute( \
+            "--bind=$KEY_APPLY:execute( \
                 touch $LVIM_FM_CONFIG_PATH/prevent && \
                 echo 'PROCCESS/DELETE' >$LVIM_FM_CONFIG_PATH/mode \
             )+top+accept"
-		)
-	elif [[ $action = "menu" ]]; then
-		multi=("+m")
-		header=("--header=$ICON_MENU MENU")
-		prompt=("--prompt=  Choice $ICON_POINTER ")
-		preview_window_hidden=("--preview-window=:hidden")
-	elif [[ $action = "explorer" ]]; then
-		header=("--header=$ICON_EXPLORER EXPLORER$mode$ICON_SEPARATOR $PWD")
-		prompt=("--prompt=  Browse $ICON_PROMPT ")
-	elif [[ $action = "search-directories-and-files" ]]; then
-		header=("--header=$ICON_SEARCH_DIRECTORIES_AND_FILES SEARCH DIRECTORIES AND FILES$mode$ICON_SEPARATOR $PWD")
-		prompt=("--prompt=  Search $ICON_PROMPT ")
-	elif [[ $action = "search-directories" ]]; then
-		header=("--header=$ICON_SEARCH_DIRECTORIES SEARCH DIRECTORIES$mode$ICON_SEPARATOR $PWD")
-		prompt=("--prompt=  Search $ICON_PROMPT ")
-	elif [[ $action = "search-files" ]]; then
-		header=("--header=$ICON_SEARCH_FILES SEARCH FILES$mode$ICON_SEPARATOR $PWD")
-		prompt=("--prompt=  Search $ICON_PROMPT ")
-	elif [[ $action = "search-in-files" ]]; then
-		header=("--header=$ICON_SEARCH_IN_FILES SEARCH IN FILES$mode$ICON_SEPARATOR $PWD")
-		prompt=("--prompt=  Search $ICON_PROMPT ")
-		if [[ -f $LVIM_FM_CONFIG_PATH/hidden-files ]]; then
-			reload=("--bind=change:reload:$SEARCH_IN_FILES_WITH_HIDDEN -n ${list_files:+-l} {q} || true")
-		else
-			reload=("--bind=change:reload:$SEARCH_IN_FILES_WITH_OUT_HIDDEN -n ${list_files:+-l} {q} || true")
-		fi
-		preview_window_for_search_in_files=("--preview-window=~0,+{2}+1/2")
-		delimiter=("--delimiter=:")
-		preview_engine=("--preview=VAL={1} && \
+        )
+    elif [[ $action = "menu" ]]; then
+        multi=("+m")
+        header=("--header=$ICON_MENU MENU")
+        prompt=("--prompt=  Choice $ICON_POINTER ")
+        preview_window_hidden=("--preview-window=:hidden")
+    elif [[ $action = "explorer" ]]; then
+        header=("--header=$ICON_EXPLORER EXPLORER$mode$ICON_SEPARATOR $PWD")
+        prompt=("--prompt=  Browse $ICON_PROMPT ")
+    elif [[ $action = "search-directories-and-files" ]]; then
+        header=("--header=$ICON_SEARCH_DIRECTORIES_AND_FILES SEARCH DIRECTORIES AND FILES$mode$ICON_SEPARATOR $PWD")
+        prompt=("--prompt=  Search $ICON_PROMPT ")
+    elif [[ $action = "search-directories" ]]; then
+        header=("--header=$ICON_SEARCH_DIRECTORIES SEARCH DIRECTORIES$mode$ICON_SEPARATOR $PWD")
+        prompt=("--prompt=  Search $ICON_PROMPT ")
+    elif [[ $action = "search-files" ]]; then
+        header=("--header=$ICON_SEARCH_FILES SEARCH FILES$mode$ICON_SEPARATOR $PWD")
+        prompt=("--prompt=  Search $ICON_PROMPT ")
+    elif [[ $action = "search-in-files" ]]; then
+        header=("--header=$ICON_SEARCH_IN_FILES SEARCH IN FILES$mode$ICON_SEPARATOR $PWD")
+        prompt=("--prompt=  Search $ICON_PROMPT ")
+        if [[ -f $LVIM_FM_CONFIG_PATH/hidden-files ]]; then
+            reload=("--bind=change:reload:$SEARCH_IN_FILES_WITH_HIDDEN -n ${list_files:+-l} {q} || true")
+        else
+            reload=("--bind=change:reload:$SEARCH_IN_FILES_WITH_OUT_HIDDEN -n ${list_files:+-l} {q} || true")
+        fi
+        preview_window_for_search_in_files=("--preview-window=~0,+{2}+1/2")
+        delimiter=("--delimiter=:")
+        preview_engine=("--preview=VAL={1} && \
         {
             file -biz \$PWD/\$VAL | grep ^text &>/dev/null && {
                 bat --color=always --style=numbers -H {2} {1}
@@ -465,135 +465,135 @@ while :; do
             $long_info \
             \$VAL 2>/dev/null
         }"
-		)
-	fi
-	if [[ -f $LVIM_FM_CONFIG_PATH/show-help ]]; then
-		preview_window_hidden=()
-		preview_engine=("--preview=cat $LVIM_FM_BIN_PATH/bin/help")
-	fi
-	selected=$(
-		get_list_for_fzf "$@" |
-			IFS=$'\n' fzf \
-				"$REVERSE" \
-				--query="$1" \
-				--history="$LVIM_FM_CONFIG_PATH/history" \
-				--nth="$(get_column_to_search)" \
-				--highlight-line \
-				--ansi \
-				--color="$COLORS" \
-				--preview-window=noborder \
-				"${delimiter[@]}" \
-				"${separator[@]}" \
-				"${prompt[@]}" \
-				"${header[@]}" \
-				--header-first \
-				"${info[@]}" \
-				"${no_border[@]}" \
-				"${border[@]}" \
-				"${pointer[@]}" \
-				"${marker[@]}" \
-				"${multi[@]}" \
-				"${sort[@]}" \
-				"${tac[@]}" \
-				"${preview_engine[@]}" \
-				"${preview_window[@]}" \
-				"${preview_window_for_search_in_files[@]}" \
-				"${preview_window_hidden[@]}" \
-				"${on_change[@]}" \
-				"${reload[@]}" \
-				"${bind_base[@]}" \
-				"${bind_app[@]}" \
-				"${enter[@]}"
-	)
-	if [[ $selected == "QUIT" ]]; then
-		break
-	elif [[ $action == "menu" ]]; then
-		choice=$(
-			echo "$selected" | cut -d" " -f2-
-		)
-		case "$choice" in
-		"EXPLORER")
-			echo "explorer" >"$LVIM_FM_CONFIG_PATH/action"
-			;;
-		"SEARCH DIRECTORIES AND FILES")
-			echo "search-directories-and-files" >"$LVIM_FM_CONFIG_PATH/action"
-			;;
-		"SEARCH DIRECTORIES")
-			echo "search-directories" >"$LVIM_FM_CONFIG_PATH/action"
-			;;
-		"SEARCH FILES")
-			echo "search-files" >"$LVIM_FM_CONFIG_PATH/action"
-			;;
-		"SEARCH IN FILES")
-			echo "search-in-files" >"$LVIM_FM_CONFIG_PATH/action"
-			;;
-		esac
-		# return
-	elif [[ $action == "search-in-files" ]]; then
-		if [[ -f $LVIM_FM_CONFIG_PATH/prevent ]]; then
-			rm "$LVIM_FM_CONFIG_PATH/prevent"
-			if [[ -f $LVIM_FM_CONFIG_PATH/reload ]]; then
-				rm "$LVIM_FM_CONFIG_PATH/reload"
-				builtin cd "$(cat "$LVIM_FM_CONFIG_PATH/base-directory")" || return
-			fi
-		else
-			if [[ $selected == " .." ]]; then
-				builtin cd .. || return
-			fi
-			post_action_search
-			if [[ $is_break == true ]]; then
-				break
-			fi
-		fi
-	elif [[ $action == "search-directories-and-files" ]] || [[ $action == "search-directories" ]] || [[ $action == "search-files" ]]; then
-		if [[ -f $LVIM_FM_CONFIG_PATH/prevent ]]; then
-			rm "$LVIM_FM_CONFIG_PATH/prevent"
-			if [[ -f $LVIM_FM_CONFIG_PATH/reload ]]; then
-				rm "$LVIM_FM_CONFIG_PATH/reload"
-				builtin cd "$(cat "$LVIM_FM_CONFIG_PATH/base-directory")" || return
-			fi
-		else
-			result=$(
-				echo "$selected" |
-					rev |
-					cut -f1 -d ' ' |
-					rev |
-					sed \
-						-e 's/\[[0-9];[0-9][0-9]m//g' \
-						-e 's/\[[0-9];[0-9];[0-9][0-9]m//g' \
-						-e 's/\[0m//g' \
-						-e 's/ //g'
-			)
-			post_action
-			if [[ $is_break == true ]]; then
-				break
-			fi
-		fi
-	elif [[ $action == "explorer" ]]; then
-		if [[ -f $LVIM_FM_CONFIG_PATH/prevent ]]; then
-			rm "$LVIM_FM_CONFIG_PATH/prevent"
-			if [[ -f $LVIM_FM_CONFIG_PATH/reload ]]; then
-				rm "$LVIM_FM_CONFIG_PATH/reload"
-				builtin cd "$(cat "$LVIM_FM_CONFIG_PATH/base-directory")" || return
-			fi
-		else
-			result=$(
-				echo "$selected" |
-					rev |
-					cut -f1 -d ' ' |
-					rev |
-					sed \
-						-e 's/\[[0-9];[0-9][0-9]m//g' \
-						-e 's/\[[0-9];[0-9];[0-9][0-9]m//g' \
-						-e 's/\[0m//g' \
-						-e 's/ //g'
-			)
-			post_action
-			if [[ $is_break == true ]]; then
-				break
-			fi
-		fi
-	fi
+        )
+    fi
+    if [[ -f $LVIM_FM_CONFIG_PATH/show-help ]]; then
+        preview_window_hidden=()
+        preview_engine=("--preview=cat $LVIM_FM_BIN_PATH/bin/help")
+    fi
+    selected=$(
+        get_list_for_fzf "$@" |
+            IFS=$'\n' fzf \
+                "$REVERSE" \
+                --query="$1" \
+                --history="$LVIM_FM_CONFIG_PATH/history" \
+                --nth="$(get_column_to_search)" \
+                --highlight-line \
+                --ansi \
+                --color="$COLORS" \
+                --preview-window=noborder \
+                "${delimiter[@]}" \
+                "${separator[@]}" \
+                "${prompt[@]}" \
+                "${header[@]}" \
+                --header-first \
+                "${info[@]}" \
+                "${no_border[@]}" \
+                "${border[@]}" \
+                "${pointer[@]}" \
+                "${marker[@]}" \
+                "${multi[@]}" \
+                "${sort[@]}" \
+                "${tac[@]}" \
+                "${preview_engine[@]}" \
+                "${preview_window[@]}" \
+                "${preview_window_for_search_in_files[@]}" \
+                "${preview_window_hidden[@]}" \
+                "${on_change[@]}" \
+                "${reload[@]}" \
+                "${bind_base[@]}" \
+                "${bind_app[@]}" \
+                "${enter[@]}"
+    )
+    if [[ $selected == "QUIT" ]]; then
+        break
+    elif [[ $action == "menu" ]]; then
+        choice=$(
+            echo "$selected" | cut -d" " -f2-
+        )
+        case "$choice" in
+        "EXPLORER")
+            echo "explorer" >"$LVIM_FM_CONFIG_PATH/action"
+            ;;
+        "SEARCH DIRECTORIES AND FILES")
+            echo "search-directories-and-files" >"$LVIM_FM_CONFIG_PATH/action"
+            ;;
+        "SEARCH DIRECTORIES")
+            echo "search-directories" >"$LVIM_FM_CONFIG_PATH/action"
+            ;;
+        "SEARCH FILES")
+            echo "search-files" >"$LVIM_FM_CONFIG_PATH/action"
+            ;;
+        "SEARCH IN FILES")
+            echo "search-in-files" >"$LVIM_FM_CONFIG_PATH/action"
+            ;;
+        esac
+        # return
+    elif [[ $action == "search-in-files" ]]; then
+        if [[ -f $LVIM_FM_CONFIG_PATH/prevent ]]; then
+            rm "$LVIM_FM_CONFIG_PATH/prevent"
+            if [[ -f $LVIM_FM_CONFIG_PATH/reload ]]; then
+                rm "$LVIM_FM_CONFIG_PATH/reload"
+                builtin cd "$(cat "$LVIM_FM_CONFIG_PATH/base-directory")" || return
+            fi
+        else
+            if [[ $selected == " .." ]]; then
+                builtin cd .. || return
+            fi
+            post_action_search
+            if [[ $is_break == true ]]; then
+                break
+            fi
+        fi
+    elif [[ $action == "search-directories-and-files" ]] || [[ $action == "search-directories" ]] || [[ $action == "search-files" ]]; then
+        if [[ -f $LVIM_FM_CONFIG_PATH/prevent ]]; then
+            rm "$LVIM_FM_CONFIG_PATH/prevent"
+            if [[ -f $LVIM_FM_CONFIG_PATH/reload ]]; then
+                rm "$LVIM_FM_CONFIG_PATH/reload"
+                builtin cd "$(cat "$LVIM_FM_CONFIG_PATH/base-directory")" || return
+            fi
+        else
+            result=$(
+                echo "$selected" |
+                    rev |
+                    cut -f1 -d ' ' |
+                    rev |
+                    sed \
+                        -e 's/\[[0-9];[0-9][0-9]m//g' \
+                        -e 's/\[[0-9];[0-9];[0-9][0-9]m//g' \
+                        -e 's/\[0m//g' \
+                        -e 's/ //g'
+            )
+            post_action
+            if [[ $is_break == true ]]; then
+                break
+            fi
+        fi
+    elif [[ $action == "explorer" ]]; then
+        if [[ -f $LVIM_FM_CONFIG_PATH/prevent ]]; then
+            rm "$LVIM_FM_CONFIG_PATH/prevent"
+            if [[ -f $LVIM_FM_CONFIG_PATH/reload ]]; then
+                rm "$LVIM_FM_CONFIG_PATH/reload"
+                builtin cd "$(cat "$LVIM_FM_CONFIG_PATH/base-directory")" || return
+            fi
+        else
+            result=$(
+                echo "$selected" |
+                    rev |
+                    cut -f1 -d ' ' |
+                    rev |
+                    sed \
+                        -e 's/\[[0-9];[0-9][0-9]m//g' \
+                        -e 's/\[[0-9];[0-9];[0-9][0-9]m//g' \
+                        -e 's/\[0m//g' \
+                        -e 's/ //g'
+            )
+            post_action
+            if [[ $is_break == true ]]; then
+                break
+            fi
+        fi
+    fi
 done
 
 # vi: ft=sh

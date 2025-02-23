@@ -1,29 +1,29 @@
 #!/usr/bin/env bash
 
 if [[ $2 = "copy" ]]; then
-	for item in $1; do
-		if [[ -d "$item" ]]; then
-			cp -R "$item" .
-		elif [[ -f "$item" ]]; then
-			cp "$item" .
-		fi
-	done
+    for item in $1; do
+        if [[ -d "$item" ]]; then
+            cp -R "$item" .
+        elif [[ -f "$item" ]]; then
+            cp "$item" .
+        fi
+    done
 elif [[ $2 = "cut" ]]; then
-	for item in $1; do
-		if [[ -d "$item" ]]; then
-			mv "$item" .
-		elif [[ -f "$item" ]]; then
-			mv "$item" .
-		fi
-	done
+    for item in $1; do
+        if [[ -d "$item" ]]; then
+            mv "$item" .
+        elif [[ -f "$item" ]]; then
+            mv "$item" .
+        fi
+    done
 elif [[ $2 = "delete" ]]; then
-	for item in $1; do
-		if [[ -d "$item" ]]; then
-			rm -rf "$item"
-		elif [[ -f "$item" ]]; then
-			rm "$item"
-		fi
-	done
+    for item in $1; do
+        if [[ -d "$item" ]]; then
+            rm -rf "$item"
+        elif [[ -f "$item" ]]; then
+            rm "$item"
+        fi
+    done
 fi
 
 # vi: ft=sh
